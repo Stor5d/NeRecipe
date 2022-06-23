@@ -1,3 +1,47 @@
 <resources>
-    <string name="app_name">NeRecipe</string>
+    <string name="author_description">Author avatar</string>
+    <string name="thousand">%1$sK</string>
+    <string name="million">%1$sM</string>
+
+    <string name="post_text">Post Text</string>
+    <string name="menu_edit">Edit</string>
+    <string name="description_post_menu">Post menu</string>
+    <string name="description_post_like">Like</string>
+    <string name="description_post_share">Share</string>
+    <string name="description_post_view">View</string>
+    <string name="description_post_save">Save</string>
+    <string name="edit_caption">Edit</string>
+    <string name="chooser_share_post">Share Post</string>
+    <string name="video">Video</string>
+    <string name="new_message">Enter your message</string>
+    <string name="notification_user_liked">User %1$s liked %2$s\'s post</string>
+    <string name="channel_remote_name">Server notifications</string>
+    <string name="channel_remote_description">Notifications from remote server</string>
+    <string name="notification_user_new_post">%1$s published a new post</string>
+
+
+    <string name="recipes">Recipes!</string>
+    <string name="app_name">My recipes</string>
+    <string name="create_recipe">Create Recipe</string>
+    <string name="title_recipe">Title</string>
+    <string name="filter_category_European">European</string>
+    <string name="filter_category_Asian">Asian</string>
+    <string name="filter_category_Pan_Asian">Pan-Asian</string>
+    <string name="filter_category_Eastern">Eastern</string>
+    <string name="filter_category_American">American</string>
+    <string name="filter_category_Russian">Russian</string>
+    <string name="filter_category_Mediterranean">Mediterranean</string>
+    <string name="category">Category</string>
+    <string name="cooking">Cooking</string>
+    <string name="step">Step</string>
+    <string name="add_stage">Add stage</string>
+    <string name="options">Options</string>
+    <string name="photo">photo</string>
+    <string name="title">Title</string>
+    <string name="remove">Remove</string>
+    <string name="move_up">Move up</string>
+    <string name="move_down">Move down</string>
+    <string name="search">Search</string>
+    <string name="filters">Filters</string>
+
 </resources>

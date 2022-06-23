@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="author_description">Author avatar</string>
+    <string name="thousand">%1$sK</string>
+    <string name="million">%1$sM</string>
+
+    <string name="post_text">Post Text</string>
+    <string name="menu_edit">Edit</string>
+    <string name="description_post_menu">Post menu</string>
+    <string name="description_post_like">Like</string>
+    <string name="description_post_share">Share</string>
+    <string name="description_post_view">View</string>
+    <string name="description_post_save">Save</string>
+    <string name="edit_caption">Edit</string>
+    <string name="chooser_share_post">Share Post</string>
+    <string name="video">Video</string>
+    <string name="new_message">Enter your message</string>
+    <string name="notification_user_liked">User %1$s liked %2$s\'s post</string>
+    <string name="channel_remote_name">Server notifications</string>
+    <string name="channel_remote_description">Notifications from remote server</string>
+    <string name="notification_user_new_post">%1$s published a new post</string>
+
+
+    <string name="app_name">Мои рецепты</string>
+    <string name="recipes">Recipes!</string>
+    <string name="create_recipe">Создать рецепт</string>
+    <string name="title_recipe">Название</string>
+    <string name="filter_category_European">Европейская</string>
+    <string name="filter_category_Asian">Азиатская</string>
+    <string name="filter_category_Pan_Asian">Паназиатская</string>
+    <string name="filter_category_Eastern">Восточная</string>
+    <string name="filter_category_American">Американская</string>
+    <string name="filter_category_Russian">Русская</string>
+    <string name="filter_category_Mediterranean">Средиземноморская</string>
+    <string name="category">Категория</string>
+    <string name="cooking">Приготовление</string>
+    <string name="step">Шаг</string>
+    <string name="add_stage">Добавить шаг</string>
+    <string name="options">Опции</string>
+    <string name="photo">Фото</string>
+    <string name="title">Заголовок</string>
+    <string name="remove">Удалить</string>
+    <string name="move_up">Переместить вверх</string>
+    <string name="move_down">Переместить вниз</string>
+    <string name="search">Поиск</string>
+    <string name="filters">Фильтры</string>
+
+</resources>
