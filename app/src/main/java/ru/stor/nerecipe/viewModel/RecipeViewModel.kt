@@ -1,6 +1,7 @@
 package ru.stor.nerecipe.viewModel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import ru.stor.nerecipe.data.RecipeRepository

@@ -1,24 +1,16 @@
 package ru.stor.nerecipe.ui
 
+import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.inputmethod.EditorInfo
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import ru.stor.nerecipe.R
-import android.view.MenuItem.OnActionExpandListener as OnActionExpandListener1
-import android.view.MenuItem.OnActionExpandListener as MenuItemOnActionExpandListener
+import ru.stor.nerecipe.classes.Recipe
+import java.util.*
+import kotlin.collections.ArrayList
 
-class AppActivity : AppCompatActivity(R.layout.app_activity) {
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        //return super.onCreateOptionsMenu(menu)
-        menuInflater.inflate(R.menu.action_bar_menu, menu)
 
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.e("AAA", item.itemId.toString())
-        return super.onOptionsItemSelected(item)
-
-    }
-}
+class AppActivity : AppCompatActivity(R.layout.app_activity)

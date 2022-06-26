@@ -2,6 +2,7 @@ package ru.stor.nerecipe.ui
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,10 +14,13 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import ru.stor.nerecipe.R
 import ru.stor.nerecipe.adapter.RecipesAdapter
 import ru.stor.nerecipe.adapter.StagesAdapter
+import ru.stor.nerecipe.classes.Recipe
+import ru.stor.nerecipe.classes.Stage
 import ru.stor.nerecipe.databinding.RecipeCreateFragmentBinding
 import ru.stor.nerecipe.viewModel.RecipeViewModel
 import ru.stor.nerecipe.viewModel.StageViewModel
@@ -27,11 +31,18 @@ class RecipeCreateFragment : Fragment() {
     private val viewModel by activityViewModels<RecipeViewModel>()
     //private val viewModelStage by activityViewModels<StageViewModel>()
     //private val args by navArgs<RecipeFragmentArgs>()
+    private var filterList = arrayListOf<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
+        setFragmentResultListener(
+            requestKey = REQUEST_KEY
+        ) { requestKey, bundle ->
+            if (requestKey != REQUEST_KEY) return@setFragmentResultListener
+            filterList = bundle.getIntegerArrayList(FilterFragment.FILTER_LIST_KEY)
+                ?: return@setFragmentResultListener
+        }
 //        viewModel.navigateToPostContentScreenEvent.observe(this) { initialContent ->
 //            val direction =
 //                RecipeFragmentDirections.actionPostFragmentToPostContentFragment(initialContent)
@@ -40,19 +51,33 @@ class RecipeCreateFragment : Fragment() {
 
     }
 
+
+
+
+
+
+
+
     private fun onSaveButtonClicked(binding: RecipeCreateFragmentBinding) {
         val text = binding.titleEditText.text
         if (!text.isNullOrBlank()) {
-            val resultBundle = Bundle(1)
+            val resultBundle = Bundle(2)
             resultBundle.putString(TITLE_KEY, text.toString())
+            resultBundle.putIntegerArrayList(CATEGORIES_KEY,filterList)
             setFragmentResult(REQUEST_KEY, resultBundle)
+
         }
         val direction = RecipeCreateFragmentDirections.actionRecipeCreateFragmentToFeedFragment()
         findNavController().navigate(direction)
     }
 
-    private fun onCancelButtonClicked(binding: RecipeCreateFragmentBinding) {
+    private fun onCancelButtonClicked() {
         val direction = RecipeCreateFragmentDirections.actionRecipeCreateFragmentToFeedFragment()
+        findNavController().navigate(direction)
+    }
+
+    private fun setFilter() {
+        val direction = RecipeCreateFragmentDirections.actionRecipeCreateFragmentToFilterFragment()
         findNavController().navigate(direction)
     }
 
@@ -65,7 +90,10 @@ class RecipeCreateFragment : Fragment() {
     ).also { binding ->
 
         binding.buttonSave.setOnClickListener {onSaveButtonClicked(binding)}
-        binding.buttonCancel.setOnClickListener {onCancelButtonClicked(binding)}
+        binding.buttonCancel.setOnClickListener {onCancelButtonClicked()}
+        binding.categoryViewStart.setOnClickListener{setFilter()}
+        binding.categoryTextViewCaption.setOnClickListener{setFilter()}
+        binding.categoryTextViewContent.setOnClickListener{setFilter()}
 
         val editText = binding.titleEditText
         val textView = binding.titleTextView
@@ -238,7 +266,8 @@ class RecipeCreateFragment : Fragment() {
 
     companion object {
         const val TITLE_KEY = "titleKey"
-        const val REQUEST_KEY = "resultKey"
+        const val CATEGORIES_KEY = "categoriesKey"
+        const val REQUEST_KEY = "requestKey"
 
     }
 

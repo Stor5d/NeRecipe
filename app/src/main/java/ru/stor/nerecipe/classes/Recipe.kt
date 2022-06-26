@@ -7,7 +7,7 @@ data class Recipe(
     val id:Long,
     val title: String,
     val author: String,
-    val categoryId: Int,
+    val categories: List<Int>,
     val firstStage: Stage,
     val elected: Boolean = false
 ) {
