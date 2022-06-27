@@ -6,49 +6,59 @@
     android:layout_height="match_parent"
     tools:context=".ui.AppActivity">
 
+    <!--    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout-->
+    <!--        android:id="@+id/swipeRefreshLayout"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent">-->
+
+    <TextView
+        android:id="@+id/empty_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/list_empty"
+        android:textSize="40sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recipeRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:visibility="visible"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/recipe_list_item"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bNaw"/>
+        tools:listitem="@layout/recipe_list_item" />
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/buttonAddRecipe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/create_recipe"
         android:layout_margin="@dimen/buttonCreateMargin"
-        app:layout_constraintBottom_toTopOf="@id/bNaw"
+        android:contentDescription="@string/create_recipe"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_baseline_add_48dp" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bNaw"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/purple_200"
-        android:backgroundTint="@color/purple_200"
-        app:backgroundTint="@color/purple_200"
-        app:itemIconTint="@drawable/bottom_bar_menu_selector"
-        app:itemTextColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipeRecyclerView"
-        app:menu="@menu/bottom_menu" />
 
     <!--    <android.support.v7.widget.Toolbar-->
-<!--        android:id="@+id/my_toolbar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="?attr/actionBarSize"-->
-<!--        android:background="?attr/colorPrimary"-->
-<!--        android:elevation="4dp"-->
-<!--        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"-->
-<!--        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>-->
-
+    <!--        android:id="@+id/my_toolbar"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="?attr/actionBarSize"-->
+    <!--        android:background="?attr/colorPrimary"-->
+    <!--        android:elevation="4dp"-->
+    <!--        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"-->
+    <!--        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>-->
+    <!--    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

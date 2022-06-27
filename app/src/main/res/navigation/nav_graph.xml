@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/feedFragment">
 
@@ -9,41 +8,12 @@
         android:id="@+id/feedFragment"
         android:name="ru.stor.nerecipe.ui.FeedFragment"
         android:label="FeedFragment" >
-        <action
-            android:id="@+id/action_feedFragment_to_recipeViewFragment"
-            app:destination="@id/recipeViewFragment" />
-        <action
-            android:id="@+id/action_feedFragment_to_recipeCreateFragment"
-            app:destination="@id/recipeCreateFragment" />
-        <action
-            android:id="@+id/action_feedFragment_to_filterFragment"
-            app:destination="@id/filterFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/recipeViewFragment"
-        android:name="ru.stor.nerecipe.ui.RecipeViewFragment"
-        android:label="recipe_view_fragment"
-        tools:layout="@layout/recipe_view_fragment" >
-        <argument
-            android:name="currentrecipeId"
-            app:argType="long"
-            android:defaultValue="0L" />
-    </fragment>
-    <fragment
-        android:id="@+id/recipeCreateFragment"
-        android:name="ru.stor.nerecipe.ui.RecipeCreateFragment"
-        android:label="RecipeCreateFragment" >
-        <action
-            android:id="@+id/action_recipeCreateFragment_to_filterFragment"
-            app:destination="@id/filterFragment" />
-        <action
-            android:id="@+id/action_recipeCreateFragment_to_feedFragment"
-            app:destination="@id/feedFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/filterFragment"
-        android:name="ru.stor.nerecipe.ui.FilterFragment"
-        android:label="FilterFragment" />
+        android:id="@+id/filterFragmentSwitch"
+        android:name="ru.stor.nerecipe.ui.FilterFragmentSwitch"
+        android:label="FilterFragmentSwitch" />
+
 
 </navigation>

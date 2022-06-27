@@ -9,10 +9,10 @@ import androidx.navigation.fragment.findNavController
 import ru.stor.nerecipe.adapter.RecipesAdapter
 import ru.stor.nerecipe.classes.Categories
 import ru.stor.nerecipe.databinding.FeedFragmentBinding
-import ru.stor.nerecipe.databinding.FilterFragmentBinding
+import ru.stor.nerecipe.databinding.FilterFragmentSwitchBinding
 import ru.stor.nerecipe.viewModel.RecipeViewModel
 
-class FilterFragment : Fragment() {
+class FilterFragmentSwitch : Fragment() {
 
     private var filterList = arrayListOf<Int>()
     //private val viewModel by activityViewModels<RecipeViewModel>()
@@ -62,18 +62,18 @@ class FilterFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = FilterFragmentBinding.inflate(
+    ) = FilterFragmentSwitchBinding.inflate(
         layoutInflater, container, false
     ).also { binding ->
 
-        binding.checkboxEuropean.setOnClickListener { filterList = filterListCreate(binding) }
-        binding.checkboxAsian.setOnClickListener { filterList = filterListCreate(binding) }
-        binding.checkboxPanAsian.setOnClickListener { filterList = filterListCreate(binding) }
-        binding.checkboxEastern.setOnClickListener { filterList = filterListCreate(binding) }
-        binding.checkboxAmerican.setOnClickListener { filterList = filterListCreate(binding) }
-        binding.checkboxRussian.setOnClickListener { filterList = filterListCreate(binding) }
-        binding.checkboxEuropean.setOnClickListener { filterList = filterListCreate(binding) }
-        binding.checkboxMediterranean.setOnClickListener { filterList = filterListCreate(binding) }
+//        binding.checkboxEuropean.setOnClickListener { filterList = filterListCreate(binding) }
+//        binding.checkboxAsian.setOnClickListener { filterList = filterListCreate(binding) }
+//        binding.checkboxPanAsian.setOnClickListener { filterList = filterListCreate(binding) }
+//        binding.checkboxEastern.setOnClickListener { filterList = filterListCreate(binding) }
+//        binding.checkboxAmerican.setOnClickListener { filterList = filterListCreate(binding) }
+//        binding.checkboxRussian.setOnClickListener { filterList = filterListCreate(binding) }
+//        binding.checkboxEuropean.setOnClickListener { filterList = filterListCreate(binding) }
+//        binding.checkboxMediterranean.setOnClickListener { filterList = filterListCreate(binding) }
 
 //       val adapter = RecipesAdapter(viewModel)
 //        binding.recipeRecyclerView.adapter = adapter
@@ -89,17 +89,17 @@ class FilterFragment : Fragment() {
 
     }.root
 
-    private fun filterListCreate(binding: FilterFragmentBinding): ArrayList<Int> {
-        val filterList = arrayListOf<Int>()
-        if (binding.checkboxEuropean.isChecked) filterList.add(Categories.European.id)
-        if (binding.checkboxAsian.isChecked) filterList.add(Categories.Asian.id)
-        if (binding.checkboxPanAsian.isChecked) filterList.add(Categories.PanAsian.id)
-        if (binding.checkboxEastern.isChecked) filterList.add(Categories.Eastern.id)
-        if (binding.checkboxAmerican.isChecked) filterList.add(Categories.American.id)
-        if (binding.checkboxRussian.isChecked) filterList.add(Categories.Russian.id)
-        if (binding.checkboxMediterranean.isChecked) filterList.add(Categories.Mediterranean.id)
-        return filterList
-    }
+//    private fun filterListCreate(binding: FilterFragmentBinding): ArrayList<Int> {
+//        val filterList = arrayListOf<Int>()
+//        if (binding.checkboxEuropean.isChecked) filterList.add(Categories.European.id)
+//        if (binding.checkboxAsian.isChecked) filterList.add(Categories.Asian.id)
+//        if (binding.checkboxPanAsian.isChecked) filterList.add(Categories.PanAsian.id)
+//        if (binding.checkboxEastern.isChecked) filterList.add(Categories.Eastern.id)
+//        if (binding.checkboxAmerican.isChecked) filterList.add(Categories.American.id)
+//        if (binding.checkboxRussian.isChecked) filterList.add(Categories.Russian.id)
+//        if (binding.checkboxMediterranean.isChecked) filterList.add(Categories.Mediterranean.id)
+//        return filterList
+//    }
 
     override fun onDestroy() {
         val resultBundle = Bundle(1)

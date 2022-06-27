@@ -87,10 +87,10 @@ class RecipeCreateFragment : Fragment(){
 
 
         setFragmentResultListener(
-            requestKey = FilterFragment.REQUEST_FILTER_KEY
+            requestKey = FilterFragmentSwitch.REQUEST_FILTER_KEY
         ) { requestKey, bundle ->
-            if (requestKey != FilterFragment.REQUEST_FILTER_KEY) return@setFragmentResultListener
-            filterList = bundle.getIntegerArrayList(FilterFragment.FILTER_LIST_KEY)
+            if (requestKey != FilterFragmentSwitch.REQUEST_FILTER_KEY) return@setFragmentResultListener
+            filterList = bundle.getIntegerArrayList(FilterFragmentSwitch.FILTER_LIST_KEY)
                 ?: return@setFragmentResultListener
             var categoryText = ""
             filterList.forEach {

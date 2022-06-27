@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.*
 
 import android.view.inputmethod.EditorInfo
+import android.widget.Filter
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 
@@ -12,8 +14,10 @@ import androidx.fragment.app.*
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import ru.stor.nerecipe.R
 import ru.stor.nerecipe.adapter.RecipesAdapter
+import ru.stor.nerecipe.adapter.RecyclerAdapter
 import ru.stor.nerecipe.adapter.StagesAdapter
 import ru.stor.nerecipe.classes.Recipe
 import ru.stor.nerecipe.classes.Stage
@@ -27,11 +31,20 @@ import kotlin.collections.ArrayList
 class FeedFragment : Fragment() {
 
     private val viewModel by activityViewModels<RecipeViewModel>()
-    lateinit var binding: FeedFragmentBinding
-    private lateinit var adapter: RecipesAdapter
+    private lateinit var binding: FeedFragmentBinding
+    private lateinit var adapter: RecyclerAdapter
+    private lateinit var recipeRecyclerView: RecyclerView
+    private lateinit var emptyView: TextView
+    private var recipeDisplayList = mutableListOf<Recipe>()
+    private var recipeFullList = mutableListOf<Recipe>()
+    private var filterCategory: Boolean = false
+    private var filterFavorites: Boolean = false
+    val idsCategory = mutableSetOf<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
 
 //        viewModel.sharePostContent.observe(this) { postContent ->
 //            val intent = Intent().apply {
@@ -84,16 +97,32 @@ class FeedFragment : Fragment() {
     ).also { it ->
         binding = it
         setHasOptionsMenu(true)
-        adapter = RecipesAdapter(viewModel)
-        val recipeRecyclerView = binding.recipeRecyclerView
+
+        adapter = RecyclerAdapter(viewModel)
+        recipeRecyclerView = binding.recipeRecyclerView
+        emptyView = binding.emptyView
         recipeRecyclerView.adapter = adapter
+
+        val itemTouchHelper = ItemTouchHelper(simpleCallback)
+        itemTouchHelper.attachToRecyclerView(recipeRecyclerView)
+
+//        val swipeRefreshLayout = binding.swipeRefreshLayout
+//        swipeRefreshLayout.setOnRefreshListener {
+//            recipeDisplayList.clear()
+//            recipeDisplayList.addAll(recipeFullList)
+//            adapter.notifyDataSetChanged()
+//            swipeRefreshLayout.isRefreshing = false
+//        }
+
         viewModel.data.observe(viewLifecycleOwner) { recipes ->
-            //adapter.submitList(recipes as MutableList<Recipe>?)
+            recipeFullList = recipes as MutableList<Recipe>
+            recipeDisplayList = recipeFullList
 
-            val itemTouchHelper = ItemTouchHelper(simpleCallback)
-            itemTouchHelper.attachToRecyclerView(recipeRecyclerView)
-            adapter.addData(recipes)
 
+
+
+            emptyData(recipeDisplayList.size)
+            adapter.submitList(recipeDisplayList)
         }
 
         binding.buttonAddRecipe.setOnClickListener {
@@ -104,45 +133,54 @@ class FeedFragment : Fragment() {
             )
         }
 
-        binding.bNaw.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.home -> {
-                    Log.e("AAA", "home")
-                    true
-                }
-                R.id.allRecipe -> {
-                    Log.e("AAA", "All")
-                    true
-                }
-                R.id.favorites -> {
-                    Log.e("AAA", "favorites")
-                    true
-                }
-                else -> true
-            }
-
-        }
-
-
     }.root
 
+    private fun emptyData(sizeList: Int) {
+        if (sizeList == 0) {
+            recipeRecyclerView.visibility = View.INVISIBLE;
+            emptyView.visibility = View.VISIBLE;
+        } else {
+            recipeRecyclerView.visibility = View.VISIBLE;
+            emptyView.visibility = View.INVISIBLE;
+        }
+    }
+
     private var simpleCallback =
-        object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP.or(ItemTouchHelper.DOWN), 0) {
+        object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP.or(ItemTouchHelper.DOWN),
+            ItemTouchHelper.LEFT.or(ItemTouchHelper.RIGHT)
+        ) {
 
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                val startPosition = viewHolder.adapterPosition
-                val endPosition = target.adapterPosition
+                val startPosition = viewHolder.layoutPosition
+                val endPosition = target.layoutPosition
+                Log.e("AAA", "v1 ${viewHolder.layoutPosition} v2 ${target.layoutPosition}")
                 viewModel.onMove(startPosition, endPosition)
                 recyclerView.adapter?.notifyItemMoved(startPosition, endPosition)
                 return true
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.layoutPosition
+                when (direction) {
+                    ItemTouchHelper.LEFT -> {
+                        val recipeDelete = recipeDisplayList.get(position)
+                        recipeDisplayList.removeAt(position)
+                        adapter.notifyItemRemoved(position)
+                        Snackbar.make(recipeRecyclerView, "delete", Snackbar.LENGTH_LONG)
+                            .setAction("Undo", View.OnClickListener {
+                                recipeDisplayList.add(position, recipeDelete)
+                                adapter.notifyItemInserted(position)
+                            }).show()
+                    }
+                    ItemTouchHelper.RIGHT -> {
 
+                    }
+                }
             }
         }
 
@@ -168,8 +206,15 @@ class FeedFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                adapter.filter.filter(newText)
-                return false
+                val searchText = newText?.lowercase(Locale.getDefault())?.trim { it <= ' ' } ?: ""
+                recipeDisplayList = if (searchText.isEmpty()) recipeFullList else {
+                    recipeFullList.filter { recipe ->
+                        recipe.title.lowercase(Locale.getDefault()).contains(searchText)
+                    }.toMutableList()
+                }
+                emptyData(recipeDisplayList.size)
+                adapter.submitList(recipeDisplayList)
+                return true
             }
         })
         super.onCreateOptionsMenu(menu, inflater)

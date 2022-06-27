@@ -156,7 +156,7 @@ internal class RecipesAdapter(
 
 }
 
-private object DiffCallback : DiffUtil.ItemCallback<Recipe>() {
+object DiffCallback : DiffUtil.ItemCallback<Recipe>() {
 
     override fun areItemsTheSame(oldItem: Recipe, newItem: Recipe): Boolean {
         return oldItem.id == newItem.id
