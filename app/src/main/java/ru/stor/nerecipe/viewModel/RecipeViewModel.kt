@@ -10,6 +10,7 @@ import ru.stor.nerecipe.adapter.RecipeInteractionListener
 import ru.stor.nerecipe.classes.Recipe
 import ru.stor.nerecipe.classes.Stage
 import ru.stor.nerecipe.util.SingleLiveEvent
+import java.util.*
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application),
     RecipeInteractionListener {
@@ -18,27 +19,28 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
     //private var currentRecipeId: Long = 0
 
     val data by repository::data
-    override fun onRemoveClicked(recipe: Recipe) {
-        TODO("Not yet implemented")
-    }
 
     override fun onEditClicked(recipe: Recipe) {
-        TODO("Not yet implemented")
+        currentRecipe.value = recipe
+        navigateToRecipeEditorScreenEvent.value = recipe
     }
 
 
-//    val sharePostContent = SingleLiveEvent<String>()
-//    val navigateToPostContentScreenEvent = SingleLiveEvent<String>()
-//    val playPostVideo = SingleLiveEvent<String>()
-   val navigateToRecipeEvent = SingleLiveEvent<Long>()
-//    private var currentPostId: Long = -1
-    val currentRecipe = MutableLiveData<Recipe>()
+    //    val sharePostContent = SingleLiveEvent<String>()
+    val navigateToRecipeEditorScreenEvent = SingleLiveEvent<Recipe>()
 
-    fun onSaveRecipe(recipe: Recipe){
+    //    val playPostVideo = SingleLiveEvent<String>()
+    val navigateToRecipeEvent = SingleLiveEvent<Long>()
+
+    //    private var currentPostId: Long = -1
+    val currentRecipe = SingleLiveEvent<Recipe>()
+
+    fun onSaveRecipe(recipe: Recipe) {
         repository.insert(recipe)
+        currentRecipe.value = null
     }
 
-//        fun onSaveButtonClicked(content: String) {
+    //        fun onSaveButtonClicked(content: String) {
 //        if (content.isBlank()) return
 //        if(currentPostId==-1L) {
 //            repository.insert(Post(
@@ -60,8 +62,9 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
 //        sharePostContent.value = post.content
 //    }
 //
-//    override fun onRemoveClicked(post: Post) = repository.delete(post.id)
-//
+    override fun onRemoveClicked(recipe: Recipe) = repository.delete(recipe.id)
+
+    //
 //    override fun onEditClicked(post: Post) {
 //        currentPostId = post.id
 //        navigateToPostContentScreenEvent.value = post.content
@@ -74,6 +77,10 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
     override fun onToRecipe(recipe: Recipe) {
         navigateToRecipeEvent.value = recipe.id
         currentRecipe.value = recipe
+    }
+
+    fun onMove(startPosition: Int, endPosition: Int) {
+        repository.move(startPosition, endPosition)
     }
 
     fun onAddRecipeClicked() {

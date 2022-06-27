@@ -10,6 +10,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ru.stor.nerecipe.data.RecipeRepository
 import ru.stor.nerecipe.classes.Recipe
+import java.util.*
 import kotlin.properties.Delegates
 
 class SharedPrefsRecipeRepository(
@@ -56,7 +57,11 @@ class SharedPrefsRecipeRepository(
     }
 
     override fun delete(recipeId: Long) {
-        recipes = recipes.filterNot { recipe -> recipe.id ==recipeId }
+        recipes = recipes.filterNot { recipe -> recipe.id == recipeId }
+    }
+
+    override fun move(startPosition: Int, endPosition: Int) {
+        Collections.swap(recipes, startPosition, endPosition)
     }
 
     override fun elected(recipeId: Long) {

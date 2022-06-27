@@ -9,8 +9,10 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.PopupMenu
+import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
@@ -19,6 +21,7 @@ import androidx.navigation.fragment.findNavController
 import ru.stor.nerecipe.R
 import ru.stor.nerecipe.adapter.RecipesAdapter
 import ru.stor.nerecipe.adapter.StagesAdapter
+import ru.stor.nerecipe.classes.Categories
 import ru.stor.nerecipe.classes.Recipe
 import ru.stor.nerecipe.classes.Stage
 import ru.stor.nerecipe.databinding.RecipeCreateFragmentBinding
@@ -26,46 +29,30 @@ import ru.stor.nerecipe.viewModel.RecipeViewModel
 import ru.stor.nerecipe.viewModel.StageViewModel
 
 
-class RecipeCreateFragment : Fragment() {
-    private var counter = 0
+class RecipeCreateFragment : Fragment(){
     private val viewModel by activityViewModels<RecipeViewModel>()
-    //private val viewModelStage by activityViewModels<StageViewModel>()
+
     //private val args by navArgs<RecipeFragmentArgs>()
     private var filterList = arrayListOf<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setFragmentResultListener(
-            requestKey = REQUEST_KEY
-        ) { requestKey, bundle ->
-            if (requestKey != REQUEST_KEY) return@setFragmentResultListener
-            filterList = bundle.getIntegerArrayList(FilterFragment.FILTER_LIST_KEY)
-                ?: return@setFragmentResultListener
-        }
-//        viewModel.navigateToPostContentScreenEvent.observe(this) { initialContent ->
-//            val direction =
-//                RecipeFragmentDirections.actionPostFragmentToPostContentFragment(initialContent)
-//            findNavController().navigate(direction)
-//        }
 
     }
 
-
-
-
-
-
-
+//    override fun onBackPressed() {
+//        Log.e("AAA","BackPressed")
+//        viewModel.currentRecipe.value = null
+//    }
 
     private fun onSaveButtonClicked(binding: RecipeCreateFragmentBinding) {
         val text = binding.titleEditText.text
         if (!text.isNullOrBlank()) {
             val resultBundle = Bundle(2)
             resultBundle.putString(TITLE_KEY, text.toString())
-            resultBundle.putIntegerArrayList(CATEGORIES_KEY,filterList)
+            resultBundle.putIntegerArrayList(CATEGORIES_KEY, filterList)
             setFragmentResult(REQUEST_KEY, resultBundle)
-
         }
         val direction = RecipeCreateFragmentDirections.actionRecipeCreateFragmentToFeedFragment()
         findNavController().navigate(direction)
@@ -76,10 +63,12 @@ class RecipeCreateFragment : Fragment() {
         findNavController().navigate(direction)
     }
 
+
     private fun setFilter() {
         val direction = RecipeCreateFragmentDirections.actionRecipeCreateFragmentToFilterFragment()
         findNavController().navigate(direction)
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,24 +78,55 @@ class RecipeCreateFragment : Fragment() {
         layoutInflater, container, false
     ).also { binding ->
 
-        binding.buttonSave.setOnClickListener {onSaveButtonClicked(binding)}
-        binding.buttonCancel.setOnClickListener {onCancelButtonClicked()}
-        binding.categoryViewStart.setOnClickListener{setFilter()}
-        binding.categoryTextViewCaption.setOnClickListener{setFilter()}
-        binding.categoryTextViewContent.setOnClickListener{setFilter()}
+
+        binding.buttonSave.setOnClickListener { onSaveButtonClicked(binding) }
+        binding.buttonCancel.setOnClickListener { onCancelButtonClicked() }
+        binding.categoryViewStart.setOnClickListener { setFilter() }
+        binding.categoryTextViewCaption.setOnClickListener { setFilter() }
+        binding.categoryTextViewContent.setOnClickListener { setFilter() }
+
+
+        setFragmentResultListener(
+            requestKey = FilterFragment.REQUEST_FILTER_KEY
+        ) { requestKey, bundle ->
+            if (requestKey != FilterFragment.REQUEST_FILTER_KEY) return@setFragmentResultListener
+            filterList = bundle.getIntegerArrayList(FilterFragment.FILTER_LIST_KEY)
+                ?: return@setFragmentResultListener
+            var categoryText = ""
+            filterList.forEach {
+                if (Categories.European.id == it) categoryText += Categories.European.key + "\n"
+                if (Categories.Asian.id == it) categoryText += Categories.Asian.key + "\n"
+                if (Categories.PanAsian.id == it) categoryText += Categories.PanAsian.key + "\n"
+                if (Categories.Eastern.id == it) categoryText += Categories.Eastern.key + "\n"
+                if (Categories.American.id == it) categoryText += Categories.American.key + "\n"
+                if (Categories.Russian.id == it) categoryText += Categories.Russian.key + "\n"
+                if (Categories.Mediterranean.id == it) categoryText += Categories.Mediterranean.key + "\n"
+            }
+            binding.categoryTextViewContent.text = categoryText
+        }
+
 
         val editText = binding.titleEditText
         val textView = binding.titleTextView
-        editText.setOnFocusChangeListener { view, focused ->
-            if (!focused && editText.text.isEmpty()) {
+
+        editText.addTextChangedListener {
+            if (editText.text.isEmpty()) {
                 textView.visibility = View.GONE
                 editText.textSize = 32F
             } else {
                 textView.visibility = View.VISIBLE
                 editText.textSize = 20F
             }
-
         }
+
+        val recipe: Recipe? = viewModel.currentRecipe.value
+        if (recipe != null) {
+            editText.setText(recipe.title)
+        }
+
+
+
+
 
 //        val adapter = StagesAdapter(viewModelStage)
 //        binding.stageRecyclerView.adapter = adapter
@@ -249,20 +269,6 @@ class RecipeCreateFragment : Fragment() {
 
 
     }.root
-
-//    private fun bind(post: Recipe, binding: RecipeFragmentBinding) {
-//        with(binding.postItem) {
-//            authorName.text = post.author
-//            contentEditText.text = post.content
-//            date.text = post.published
-//            shareButton.text = likesShareViewToString(post.shareCount)
-//            viewButton.text = likesShareViewToString(post.viewCount)
-//            likeButton.text = likesShareViewToString(post.likes)
-//            likeButton.isChecked = post.likeByMe
-//            if (post.urlVideo.isBlank()) videoGroup.visibility = ViewGroup.GONE else
-//                videoGroup.visibility = ViewGroup.VISIBLE
-//        }
-//    }
 
     companion object {
         const val TITLE_KEY = "titleKey"

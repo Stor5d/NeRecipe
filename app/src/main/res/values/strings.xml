@@ -4,7 +4,7 @@
     <string name="million">%1$sM</string>
 
     <string name="post_text">Post Text</string>
-    <string name="menu_edit">Edit</string>
+    <string name="edit">Edit</string>
     <string name="description_post_menu">Post menu</string>
     <string name="description_post_like">Like</string>
     <string name="description_post_share">Share</string>
@@ -43,5 +43,8 @@
     <string name="move_down">Move down</string>
     <string name="search">Search</string>
     <string name="filters">Filters</string>
+    <string name="home">Home</string>
+    <string name="all">All</string>
+    <string name="favorites">Favorites</string>
 
 </resources>

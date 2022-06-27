@@ -51,18 +51,8 @@
             app:layout_constraintBottom_toBottomOf="@id/titleViewStart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/titleViewStart"
-            app:layout_constraintTop_toBottomOf="@id/titleTextView" />
-
-        <ImageView
-            android:id="@+id/titleViewBottom"
-            android:layout_width="0dp"
-            android:layout_height="6dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/title"
-            app:layout_constraintBottom_toBottomOf="@id/titleViewStart"
-            app:layout_constraintEnd_toEndOf="@id/titleEditText"
-            app:layout_constraintStart_toEndOf="@id/titleViewStart" />
-
+            app:layout_constraintTop_toBottomOf="@id/titleTextView"
+            android:saveEnabled="true"/>
 
         <ImageView
             android:id="@+id/categoryViewStart"
@@ -131,16 +121,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/stageTextView" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/stageRecyclerView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/stageTextView"
-            tools:listitem="@layout/custom_edit_text_layout" />
-
         <Button
             android:id="@+id/buttonSave"
             android:layout_width="wrap_content"
@@ -148,7 +128,7 @@
             android:text="Create"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/buttonCancel"
-            app:layout_constraintTop_toTopOf="@id/stageRecyclerView"/>
+            app:layout_constraintTop_toBottomOf="@id/stageTextView"/>
 
         <Button
             android:id="@+id/buttonCancel"
@@ -157,7 +137,7 @@
             android:text="Cancel"
             app:layout_constraintStart_toEndOf="@id/buttonSave"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/stageRecyclerView"/>
+            app:layout_constraintTop_toBottomOf="@id/stageTextView"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

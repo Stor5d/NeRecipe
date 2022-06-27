@@ -1,6 +1,7 @@
 package ru.stor.nerecipe.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.*
@@ -72,7 +73,7 @@ class FilterFragment : Fragment() {
         binding.checkboxAmerican.setOnClickListener { filterList = filterListCreate(binding) }
         binding.checkboxRussian.setOnClickListener { filterList = filterListCreate(binding) }
         binding.checkboxEuropean.setOnClickListener { filterList = filterListCreate(binding) }
-        binding.checkboxEuropean.setOnClickListener { filterList = filterListCreate(binding) }
+        binding.checkboxMediterranean.setOnClickListener { filterList = filterListCreate(binding) }
 
 //       val adapter = RecipesAdapter(viewModel)
 //        binding.recipeRecyclerView.adapter = adapter
@@ -90,23 +91,22 @@ class FilterFragment : Fragment() {
 
     private fun filterListCreate(binding: FilterFragmentBinding): ArrayList<Int> {
         val filterList = arrayListOf<Int>()
-        if (binding.checkboxEuropean.isSelected) filterList.add(Categories.European.id)
-        if (binding.checkboxAsian.isSelected) filterList.add(Categories.Asian.id)
-        if (binding.checkboxPanAsian.isSelected) filterList.add(Categories.PanAsian.id)
-        if (binding.checkboxEastern.isSelected) filterList.add(Categories.Eastern.id)
-        if (binding.checkboxAmerican.isSelected) filterList.add(Categories.American.id)
-        if (binding.checkboxRussian.isSelected) filterList.add(Categories.Russian.id)
-        if (binding.checkboxMediterranean.isSelected) filterList.add(Categories.Mediterranean.id)
+        if (binding.checkboxEuropean.isChecked) filterList.add(Categories.European.id)
+        if (binding.checkboxAsian.isChecked) filterList.add(Categories.Asian.id)
+        if (binding.checkboxPanAsian.isChecked) filterList.add(Categories.PanAsian.id)
+        if (binding.checkboxEastern.isChecked) filterList.add(Categories.Eastern.id)
+        if (binding.checkboxAmerican.isChecked) filterList.add(Categories.American.id)
+        if (binding.checkboxRussian.isChecked) filterList.add(Categories.Russian.id)
+        if (binding.checkboxMediterranean.isChecked) filterList.add(Categories.Mediterranean.id)
         return filterList
     }
 
     override fun onDestroy() {
         val resultBundle = Bundle(1)
-        resultBundle.putIntegerArrayList(FILTER_LIST_KEY,filterList)
+        resultBundle.putIntegerArrayList(FILTER_LIST_KEY, filterList)
         setFragmentResult(REQUEST_FILTER_KEY, resultBundle)
         super.onDestroy()
     }
-
 
 
     companion object {

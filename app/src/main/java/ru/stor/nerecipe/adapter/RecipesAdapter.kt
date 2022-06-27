@@ -5,31 +5,40 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import ru.stor.nerecipe.R
 import ru.stor.nerecipe.classes.Recipe
+import ru.stor.nerecipe.databinding.EmptyListLayoutBinding
 import ru.stor.nerecipe.databinding.RecipeListItemBinding
 import java.util.*
-import kotlin.collections.ArrayList
 
 internal class RecipesAdapter(
     private val interactionListener: RecipeInteractionListener
 ) : ListAdapter<Recipe, RecipesAdapter.ViewHolder>(DiffCallback), Filterable {
 
-    private var recipeList = mutableListOf<Recipe>()
-    private var recipeListFull = mutableListOf<Recipe>()
+    lateinit var recipeList: MutableList<Recipe> //= mutableListOf<Recipe>()
+    lateinit var recipeListFull: MutableList<Recipe>
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = RecipeListItemBinding.inflate(inflater, parent, false)
-
         return ViewHolder(binding, interactionListener)
     }
 
+//    override fun getItemViewType(position: Int): Int {
+//        if (recipeList.isEmpty()) {
+//            return VIEW_TYPE_EMPTY_LIST_PLACEHOLDER;
+//        } else {
+//            return VIEW_TYPE_OBJECT_VIEW;
+//        }
+//    }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
-
     }
 
     inner class ViewHolder(
@@ -39,29 +48,29 @@ internal class RecipesAdapter(
 
         private lateinit var recipe: Recipe
 
-//        private val popupMenu by lazy {
-//            PopupMenu(itemView.context, binding.menu).apply {
-//                inflate(R.menu.option_post)
-//                setOnMenuItemClickListener { menuItem ->
-//                    when (menuItem.itemId) {
-//                        R.id.remove -> {
-//                            listener.onRemoveClicked(post)
-//                            true
-//                        }
-//                        R.id.edit -> {
-//                            listener.onEditClicked(post)
-//                            true
-//                        }
-//                        else -> false
-//                    }
-//                }
-//            }
-//        }
+        private val popupMenu by lazy {
+            PopupMenu(itemView.context, binding.menu).apply {
+                inflate(R.menu.recipe_menu)
+                setOnMenuItemClickListener { menuItem ->
+                    when (menuItem.itemId) {
+                        R.id.remove -> {
+                            listener.onRemoveClicked(recipe)
+                            true
+                        }
+                        R.id.edit -> {
+                            listener.onEditClicked(recipe)
+                            true
+                        }
+                        else -> false
+                    }
+                }
+            }
+        }
 
         init {
 //            binding.likeButton.setOnClickListener { listener.onLikeClicked(post) }
 //            binding.shareButton.setOnClickListener { listener.onShareClicked(post) }
-//            binding.menu.setOnClickListener { popupMenu.show() }
+            binding.menu.setOnClickListener { popupMenu.show() }
 //            binding.play.setOnClickListener { listener.onPlayClicked(post) }
 //            binding.preView.setOnClickListener { listener.onPlayClicked(post) }
 //            binding.avatar.setOnClickListener { listener.onToPost(post) }
@@ -80,96 +89,79 @@ internal class RecipesAdapter(
                 category.text = recipe.id.toString()
             }
         }
-
-
     }
 
     fun addData(list: List<Recipe>) {
+        recipeListFull = mutableListOf<Recipe>()
         recipeListFull.addAll(list)
         recipeList = recipeListFull
         submitList(recipeList)
-        //notifyDataSetChanged()
+    }
+
+    override fun submitList(list: MutableList<Recipe>?) {
+        super.submitList(list)
+        notifyDataSetChanged()
     }
 
     override fun getFilter(): Filter {
         return object : Filter() {
+
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val charString =
                     constraint.toString().lowercase(Locale.getDefault()).trim { it <= ' ' } ?: ""
-                if (charString.isEmpty()) recipeList = recipeListFull else {
-                    val filteredList = ArrayList<Recipe>()
-                    recipeListFull
-                        .filter {
-                            it.title.lowercase(Locale.getDefault()).contains(charString)
-
-                        }
-                        .forEach { filteredList.add(it) }
-                    recipeList = filteredList
-
+                recipeList = if (charString.isEmpty()) recipeListFull else {
+                    recipeListFull.filter { recipe ->
+                        recipe.title.lowercase(Locale.getDefault()).contains(charString)
+                    }.toMutableList()
                 }
+
+//                if (charString.isEmpty()) recipeList = recipeListFull else {
+//
+//                    val filteredList = ArrayList<Recipe>()
+//
+//                    recipeListFull
+//                        .filter {
+//                            it.title.lowercase(Locale.getDefault()).contains(charString)
+//
+//                        }
+//                        .forEach { filteredList.add(it) }
+//
+//                    recipeList = filteredList
+//
+//                }
                 return FilterResults().apply { values = recipeList }
             }
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-
-                recipeList = if (results?.values == null)
-                    ArrayList()
-                else
-                    results.values as ArrayList<Recipe>
+//                recipeList = if (results?.values == null)
+//                    ArrayList()
+//                else
+//                    results.values as ArrayList<Recipe>
                 submitList(recipeList)
-                //notifyDataSetChanged()
             }
         }
     }
 
-//    override fun getFilter(): Filter {
-//        return filter
+
+//    inner class ViewHolder2(
+//        private val binding: EmptyListLayoutBinding,
+//    ) : RecyclerView.ViewHolder(binding.root) {
+//
 //    }
-//
-//
-//    private val filter = object : Filter() {
-//        override fun performFiltering(constraint: CharSequence): FilterResults {
-//            var filteredList: MutableList<Recipe> = ArrayList()
-//            Log.e("AAA isEmpty", constraint.isEmpty().toString())
-//            Log.e("AAA length", constraint.length.toString())
-//            if (constraint.isEmpty() || constraint.length==0) {
-//                    filteredList= recipeListFull
-//                Log.e("AAA filteredList", filteredList.size.toString())
-//            } else {
-//                val filterPattern =
-//                    constraint.toString().lowercase(Locale.getDefault()).trim { it <= ' ' }
-//                    for (item in recipeListFull) {
-//                        if (item.title.lowercase(Locale.getDefault()).contains(filterPattern)) {
-//                            filteredList.add(item)
-//                        }
-//                }
-//            }
-//            val results = FilterResults()
-//            Log.e("AAA_filteredList", filteredList.size.toString())
-//            results.values = filteredList
-//            return results
-//        }
-//
-//        override fun publishResults(constraint: CharSequence, results: FilterResults) {
-//            recipeList.clear()
-//            recipeList= results.values as MutableList<Recipe>
-//           notifyDataSetChanged()
-//        }
-//    }
-//
-//    override fun submitList(list: MutableList<Recipe>?) {
-//        Log.e("AAA data", "")
-//        if (list != null) {
-//            recipeListFull= list
-//        }
-//        super.submitList(list)
-//    }
+
+    companion object {
+        const val VIEW_TYPE_EMPTY_LIST_PLACEHOLDER = 0
+        const val VIEW_TYPE_OBJECT_VIEW = 1
+    }
+
 }
 
 private object DiffCallback : DiffUtil.ItemCallback<Recipe>() {
 
-    override fun areItemsTheSame(oldItem: Recipe, newItem: Recipe): Boolean =
-        oldItem.id == newItem.id
+    override fun areItemsTheSame(oldItem: Recipe, newItem: Recipe): Boolean {
+        return oldItem.id == newItem.id
+    }
+
 
     override fun areContentsTheSame(oldItem: Recipe, newItem: Recipe): Boolean =
         oldItem == newItem

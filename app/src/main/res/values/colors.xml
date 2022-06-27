@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="yellow">#FFC107</color>
     <color name="grey">#DDDCD7</color>
+    <color name="unchecked">#828383</color>
+    <color name="checked">#00BCD4</color>
 </resources>

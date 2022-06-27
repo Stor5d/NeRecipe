@@ -8,10 +8,14 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recipeRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/recipe_list_item" />
+        tools:listitem="@layout/recipe_list_item"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bNaw"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/buttonAddRecipe"
@@ -19,11 +23,25 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/create_recipe"
         android:layout_margin="@dimen/buttonCreateMargin"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bNaw"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_baseline_add_48dp" />
 
-<!--    <android.support.v7.widget.Toolbar-->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bNaw"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_200"
+        android:backgroundTint="@color/purple_200"
+        app:backgroundTint="@color/purple_200"
+        app:itemIconTint="@drawable/bottom_bar_menu_selector"
+        app:itemTextColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recipeRecyclerView"
+        app:menu="@menu/bottom_menu" />
+
+    <!--    <android.support.v7.widget.Toolbar-->
 <!--        android:id="@+id/my_toolbar"-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="?attr/actionBarSize"-->
@@ -31,5 +49,6 @@
 <!--        android:elevation="4dp"-->
 <!--        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"-->
 <!--        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>-->
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

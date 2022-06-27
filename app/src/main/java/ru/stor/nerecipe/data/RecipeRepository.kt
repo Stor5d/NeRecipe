@@ -10,6 +10,7 @@ interface RecipeRepository {
     fun insert(recipe: Recipe)
     fun update(recipe: Recipe)
     fun delete(recipeId:Long)
+    fun move(startPosition: Int, endPosition: Int)
     fun elected(recipeId:Long)
 
     companion object{
