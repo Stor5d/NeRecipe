@@ -31,7 +31,7 @@
     <string name="filter_category_American">American</string>
     <string name="filter_category_Russian">Russian</string>
     <string name="filter_category_Mediterranean">Mediterranean</string>
-    <string name="category">Category</string>
+    <string name="category">Categories:</string>
     <string name="cooking">Cooking</string>
     <string name="step">Step</string>
     <string name="add_stage">Add stage</string>
@@ -47,5 +47,6 @@
     <string name="all">All</string>
     <string name="favorites">Favorites</string>
     <string name="list_empty">list is empty</string>
+    <string name="description_recipe_like" />
 
 </resources>

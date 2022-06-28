@@ -2,13 +2,13 @@ package ru.stor.nerecipe.viewModel
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.*
+import androidx.lifecycle.Observer
 import ru.stor.nerecipe.data.RecipeRepository
 import ru.stor.nerecipe.data.impl.SharedPrefsRecipeRepository
 import ru.stor.nerecipe.adapter.RecipeInteractionListener
 import ru.stor.nerecipe.classes.Recipe
-import ru.stor.nerecipe.classes.Stage
+import ru.stor.nerecipe.ui.FilterFragmentSwitch
 import ru.stor.nerecipe.util.SingleLiveEvent
 import java.util.*
 
@@ -20,19 +20,80 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
 
     val data by repository::data
 
+    // val data: MutableLiveData<List<Recipe>> = repository.data as MutableLiveData<List<Recipe>>
+    val filtratedData: MediatorLiveData<List<Recipe>> = MediatorLiveData()
+    val searchQuery: MutableLiveData<String> = MutableLiveData()
+    val categoriesList: MutableLiveData<List<Int>> = MutableLiveData()
+    var favoriteFilter: MutableLiveData<Boolean> = MutableLiveData()
+
+
+    init {
+        favoriteFilter.value = false
+        categoriesList.value = updateCategoryList()
+
+        filtratedData.addSource(data) {
+            multiFilter()
+        }
+        filtratedData.addSource(searchQuery) {
+            multiFilter()
+        }
+        filtratedData.addSource(categoriesList) {
+            multiFilter()
+        }
+        filtratedData.addSource(favoriteFilter) {
+            multiFilter()
+        }
+    }
+
+    private fun updateCategoryList(): List<Int> {
+        val list = mutableListOf<Int>()
+        if (repository.getStateSwitch(FilterFragmentSwitch.KEY_STATE_SWITCH_EUROPEAN)) list.add(0)
+        if (repository.getStateSwitch(FilterFragmentSwitch.KEY_STATE_SWITCH_ASIAN)) list.add(1)
+        if (repository.getStateSwitch(FilterFragmentSwitch.KEY_STATE_SWITCH_PAN_ASIAN)) list.add(2)
+        if (repository.getStateSwitch(FilterFragmentSwitch.KEY_STATE_SWITCH_EASTERN)) list.add(3)
+        if (repository.getStateSwitch(FilterFragmentSwitch.KEY_STATE_SWITCH_AMERICAN)) list.add(4)
+        if (repository.getStateSwitch(FilterFragmentSwitch.KEY_STATE_SWITCH_RUSSIAN)) list.add(5)
+        if (repository.getStateSwitch(FilterFragmentSwitch.KEY_STATE_SWITCH_MEDITERRSNEAN)) list
+            .add(6)
+        return list
+    }
+
+    fun saveStateSwitch(key: String, b: Boolean) {
+        repository.saveStateSwitch(key, b)
+        categoriesList.value = updateCategoryList()
+    }
+
+    fun getStateSwitch(key: String): Boolean {
+        return repository.getStateSwitch(key)
+    }
+
+    private fun multiFilter() {
+        val searchText = searchQuery.value?.lowercase(Locale.getDefault())?.trim { it <= ' ' } ?: ""
+        if (searchText.isNotEmpty() || data.value != null || categoriesList.value != null) {
+            val list = data.value?.filter { recipe ->
+                recipe.title.lowercase(Locale.getDefault()).contains(searchText)
+            }?.filter {
+                it.categories.forEach { categoryId ->
+                    if (categoriesList.value!!.contains(categoryId)) return@filter true
+                }
+                return@filter false
+            }
+            val listFavorite = if (favoriteFilter.value==true) list?.filter{recipe->
+                recipe.liked
+            } else list
+            filtratedData.value = listFavorite
+        } else {
+            filtratedData.value = data.value
+        }
+    }
+
     override fun onEditClicked(recipe: Recipe) {
         currentRecipe.value = recipe
         navigateToRecipeEditorScreenEvent.value = recipe
     }
 
-
-    //    val sharePostContent = SingleLiveEvent<String>()
     val navigateToRecipeEditorScreenEvent = SingleLiveEvent<Recipe>()
-
-    //    val playPostVideo = SingleLiveEvent<String>()
     val navigateToRecipeEvent = SingleLiveEvent<Long>()
-
-    //    private var currentPostId: Long = -1
     val currentRecipe = SingleLiveEvent<Recipe>()
 
     fun onSaveRecipe(recipe: Recipe) {
@@ -62,10 +123,9 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
 //        sharePostContent.value = post.content
 //    }
 //
-    override fun onRemoveClicked(recipe: Recipe) = repository.delete(recipe.id)
+    override fun onRemoveClicked(recipeId: Long) = repository.delete(recipeId)
 
-    //
-//    override fun onEditClicked(post: Post) {
+    //    override fun onEditClicked(post: Post) {
 //        currentPostId = post.id
 //        navigateToPostContentScreenEvent.value = post.content
 //    }
@@ -86,10 +146,11 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
     fun onAddRecipeClicked() {
         //navigateToPostContentScreenEvent.call()
     }
-//
-//    fun onLikeClickedPost() {
-//        repository.liked(currentPostId)
-//    }
+
+    //
+    override fun onLikeClicked(recipeId: Long) {
+        repository.liked(recipeId)
+    }
 //
 //    fun onShareClickedPost() {
 //        repository.share(currentPostId)

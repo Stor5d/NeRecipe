@@ -11,9 +11,8 @@ interface RecipeRepository {
     fun update(recipe: Recipe)
     fun delete(recipeId:Long)
     fun move(startPosition: Int, endPosition: Int)
-    fun elected(recipeId:Long)
+    fun liked(recipeId:Long)
+    fun saveStateSwitch(key:String,b:Boolean)
+    fun getStateSwitch(key:String):Boolean
 
-    companion object{
-        const val NEW_POST_ID = 0L
-    }
 }

@@ -4,18 +4,23 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.CompoundButton
+import android.widget.Switch
+import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.*
 import androidx.navigation.fragment.findNavController
 import ru.stor.nerecipe.adapter.RecipesAdapter
 import ru.stor.nerecipe.classes.Categories
+import ru.stor.nerecipe.databinding.AppActivityBinding
 import ru.stor.nerecipe.databinding.FeedFragmentBinding
 import ru.stor.nerecipe.databinding.FilterFragmentSwitchBinding
 import ru.stor.nerecipe.viewModel.RecipeViewModel
 
 class FilterFragmentSwitch : Fragment() {
 
-    private var filterList = arrayListOf<Int>()
-    //private val viewModel by activityViewModels<RecipeViewModel>()
+    private var filterList = mutableListOf<Int>()
+    private lateinit var binding: FilterFragmentSwitchBinding
+    private val viewModel by activityViewModels<RecipeViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,16 +69,66 @@ class FilterFragmentSwitch : Fragment() {
         savedInstanceState: Bundle?
     ) = FilterFragmentSwitchBinding.inflate(
         layoutInflater, container, false
-    ).also { binding ->
+    ).also { it ->
+        binding = it
 
-//        binding.checkboxEuropean.setOnClickListener { filterList = filterListCreate(binding) }
-//        binding.checkboxAsian.setOnClickListener { filterList = filterListCreate(binding) }
-//        binding.checkboxPanAsian.setOnClickListener { filterList = filterListCreate(binding) }
-//        binding.checkboxEastern.setOnClickListener { filterList = filterListCreate(binding) }
-//        binding.checkboxAmerican.setOnClickListener { filterList = filterListCreate(binding) }
-//        binding.checkboxRussian.setOnClickListener { filterList = filterListCreate(binding) }
-//        binding.checkboxEuropean.setOnClickListener { filterList = filterListCreate(binding) }
-//        binding.checkboxMediterranean.setOnClickListener { filterList = filterListCreate(binding) }
+        with(binding) {
+            switchEuropean.isChecked = viewModel.getStateSwitch(KEY_STATE_SWITCH_EUROPEAN)
+            switchAsian.isChecked = viewModel.getStateSwitch(KEY_STATE_SWITCH_ASIAN)
+            switchPanAsian.isChecked = viewModel.getStateSwitch(KEY_STATE_SWITCH_PAN_ASIAN)
+            switchEastern.isChecked = viewModel.getStateSwitch(KEY_STATE_SWITCH_EASTERN)
+            switchAmerican.isChecked = viewModel.getStateSwitch(KEY_STATE_SWITCH_AMERICAN)
+            switchRussian.isChecked = viewModel.getStateSwitch(KEY_STATE_SWITCH_RUSSIAN)
+            switchMediterranean.isChecked = viewModel.getStateSwitch(KEY_STATE_SWITCH_MEDITERRSNEAN)
+        }
+
+        with(binding) {
+
+            switchEuropean.setOnClickListener {
+                viewModel.saveStateSwitch(
+                    KEY_STATE_SWITCH_EUROPEAN,
+                    switchEuropean.isChecked
+                )
+            }
+            switchAsian.setOnClickListener {
+                viewModel.saveStateSwitch(
+                    KEY_STATE_SWITCH_ASIAN,
+                    switchAsian.isChecked
+                )
+            }
+            switchPanAsian.setOnClickListener {
+                viewModel.saveStateSwitch(
+                    KEY_STATE_SWITCH_PAN_ASIAN,
+                    switchPanAsian.isChecked
+                )
+            }
+            switchEastern.setOnClickListener {
+                viewModel.saveStateSwitch(
+                    KEY_STATE_SWITCH_EASTERN,
+                    switchEastern.isChecked
+                )
+            }
+            switchAmerican.setOnClickListener {
+                viewModel.saveStateSwitch(
+                    KEY_STATE_SWITCH_AMERICAN,
+                    switchAmerican.isChecked
+                )
+            }
+            switchRussian.setOnClickListener {
+                viewModel.saveStateSwitch(
+                    KEY_STATE_SWITCH_RUSSIAN,
+                    switchRussian.isChecked
+                )
+            }
+            switchMediterranean.setOnClickListener {
+                viewModel.saveStateSwitch(
+                    KEY_STATE_SWITCH_MEDITERRSNEAN,
+                    switchMediterranean.isChecked
+                )
+            }
+
+        }
+
 
 //       val adapter = RecipesAdapter(viewModel)
 //        binding.recipeRecyclerView.adapter = adapter
@@ -89,29 +144,25 @@ class FilterFragmentSwitch : Fragment() {
 
     }.root
 
-//    private fun filterListCreate(binding: FilterFragmentBinding): ArrayList<Int> {
-//        val filterList = arrayListOf<Int>()
-//        if (binding.checkboxEuropean.isChecked) filterList.add(Categories.European.id)
-//        if (binding.checkboxAsian.isChecked) filterList.add(Categories.Asian.id)
-//        if (binding.checkboxPanAsian.isChecked) filterList.add(Categories.PanAsian.id)
-//        if (binding.checkboxEastern.isChecked) filterList.add(Categories.Eastern.id)
-//        if (binding.checkboxAmerican.isChecked) filterList.add(Categories.American.id)
-//        if (binding.checkboxRussian.isChecked) filterList.add(Categories.Russian.id)
-//        if (binding.checkboxMediterranean.isChecked) filterList.add(Categories.Mediterranean.id)
-//        return filterList
-//    }
 
-    override fun onDestroy() {
-        val resultBundle = Bundle(1)
-        resultBundle.putIntegerArrayList(FILTER_LIST_KEY, filterList)
-        setFragmentResult(REQUEST_FILTER_KEY, resultBundle)
-        super.onDestroy()
-    }
+//    override fun onDestroy() {
+//        val resultBundle = Bundle(1)
+//        resultBundle.putIntegerArrayList(FILTER_LIST_KEY, filterList)
+//        setFragmentResult(REQUEST_FILTER_KEY, resultBundle)
+//        super.onDestroy()
+//    }
 
 
     companion object {
-        const val FILTER_LIST_KEY = "filterListKey"
-        const val REQUEST_FILTER_KEY = "requestFilterKey"
+        const val KEY_STATE_SWITCH_EUROPEAN = "european"
+        const val KEY_STATE_SWITCH_ASIAN = "asian"
+        const val KEY_STATE_SWITCH_PAN_ASIAN = "pan_asian"
+        const val KEY_STATE_SWITCH_EASTERN = "eastern"
+        const val KEY_STATE_SWITCH_AMERICAN = "american"
+        const val KEY_STATE_SWITCH_RUSSIAN = "russian"
+        const val KEY_STATE_SWITCH_MEDITERRSNEAN = "mediterrsnean"
+        // const val FILTER_LIST_KEY = "filterListKey"
+        //  const val REQUEST_FILTER_KEY = "requestFilterKey"
 
     }
 

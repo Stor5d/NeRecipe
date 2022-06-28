@@ -9,7 +9,7 @@ data class Recipe(
     val author: String,
     val categories: List<Int>,
     val firstStage: Stage,
-    val elected: Boolean = false
+    val liked: Boolean = false
 ) {
 
     //private var stages = listOf(firstStage)

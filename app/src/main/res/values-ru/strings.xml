@@ -32,7 +32,7 @@
     <string name="filter_category_American">Американская</string>
     <string name="filter_category_Russian">Русская</string>
     <string name="filter_category_Mediterranean">Средиземноморская</string>
-    <string name="category">Категория</string>
+    <string name="category">Категории:</string>
     <string name="cooking">Приготовление</string>
     <string name="step">Шаг</string>
     <string name="add_stage">Добавить шаг</string>
@@ -48,5 +48,6 @@
     <string name="all">Все</string>
     <string name="favorites">Избранное</string>
     <string name="list_empty">Список пуст</string>
+    <string name="description_recipe_like" />
 
 </resources>

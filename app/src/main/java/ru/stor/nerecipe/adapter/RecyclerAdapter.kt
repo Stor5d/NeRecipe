@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.stor.nerecipe.R
+import ru.stor.nerecipe.classes.Categories
 import ru.stor.nerecipe.classes.Recipe
 import ru.stor.nerecipe.databinding.CardLayoutBinding
 import ru.stor.nerecipe.databinding.EmptyListLayoutBinding
@@ -50,7 +51,6 @@ internal class RecyclerAdapter(
 //    }
 
 
-
     inner class ViewHolder(
         private val binding: CardLayoutBinding,
         listener: RecipeInteractionListener
@@ -60,24 +60,24 @@ internal class RecyclerAdapter(
         private lateinit var recipe: Recipe
 
 
-//        private val popupMenu by lazy {
-//            PopupMenu(itemView.context, binding.menu).apply {
-//                inflate(R.menu.recipe_menu)
-//                setOnMenuItemClickListener { menuItem ->
-//                    when (menuItem.itemId) {
-//                        R.id.remove -> {
-//                            listener.onRemoveClicked(recipe)
-//                            true
-//                        }
-//                        R.id.edit -> {
-//                            listener.onEditClicked(recipe)
-//                            true
-//                        }
-//                        else -> false
-//                    }
-//                }
-//            }
-//        }
+        private val popupMenu by lazy {
+            PopupMenu(itemView.context, binding.menuButton).apply {
+                inflate(R.menu.recipe_menu)
+                setOnMenuItemClickListener { menuItem ->
+                    when (menuItem.itemId) {
+                        R.id.remove -> {
+                            listener.onRemoveClicked(recipe.id)
+                            true
+                        }
+                        R.id.edit -> {
+                            listener.onEditClicked(recipe)
+                            true
+                        }
+                        else -> false
+                    }
+                }
+            }
+        }
 
         init {
 
@@ -90,9 +90,9 @@ internal class RecyclerAdapter(
                 )
                     .show()
             }
-            //            binding.likeButton.setOnClickListener { listener.onLikeClicked(post) }
+            binding.likeButton.setOnClickListener { listener.onLikeClicked(recipe.id) }
 //            binding.shareButton.setOnClickListener { listener.onShareClicked(post) }
-            //  binding.menu.setOnClickListener { popupMenu.show() }
+            binding.menuButton.setOnClickListener { popupMenu.show() }
 //            binding.play.setOnClickListener { listener.onPlayClicked(post) }
 //            binding.preView.setOnClickListener { listener.onPlayClicked(post) }
 //            binding.avatar.setOnClickListener { listener.onToPost(post) }
@@ -107,14 +107,25 @@ internal class RecyclerAdapter(
         fun bind(recipe: Recipe) {
             this.recipe = recipe
             with(binding) {
-                itemTextView.text = recipe.title
-//                recipeName.text = recipe.title
-//                authorName.text = recipe.author
-//                category.text = recipe.id.toString()
+                itemTextView.text = recipe.title + " | " + recipe.categories
+                authorName.text = recipe.author + " | " + recipe.id
+                categoryTextViewContent.text = categoriesText(recipe.categories)
+                likeButton.isChecked = recipe.liked
             }
         }
     }
 
+    private fun categoriesText(list: List<Int>): String {
+        var text = if (list.contains(Categories.European.id)) Categories.European.key + "\n" else ""
+        text += if (list.contains(Categories.Asian.id)) Categories.Asian.key + "\n" else ""
+        text += if (list.contains(Categories.PanAsian.id)) Categories.PanAsian.key + "\n" else ""
+        text += if (list.contains(Categories.Eastern.id)) Categories.Eastern.key + "\n" else ""
+        text += if (list.contains(Categories.American.id)) Categories.American.key + "\n" else ""
+        text += if (list.contains(Categories.Russian.id)) Categories.Russian.key + "\n" else ""
+        text += if (list.contains(Categories.Mediterranean.id)) Categories.Mediterranean.key + "\n" else ""
+        text = text.removeSuffix("\n")
+        return text
+    }
 //    fun addData(list: List<Recipe>) {
 //        recipeListFull = mutableListOf<Recipe>()
 //        recipeListFull.addAll(list)
@@ -130,7 +141,6 @@ internal class RecyclerAdapter(
 //    override fun getItemCount(): Int {
 //        return recipeList.size
 //    }
-
 
 
 }

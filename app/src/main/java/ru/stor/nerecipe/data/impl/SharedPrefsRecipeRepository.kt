@@ -10,7 +10,6 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ru.stor.nerecipe.data.RecipeRepository
 import ru.stor.nerecipe.classes.Recipe
-import java.util.*
 import kotlin.properties.Delegates
 
 class SharedPrefsRecipeRepository(
@@ -61,15 +60,34 @@ class SharedPrefsRecipeRepository(
     }
 
     override fun move(startPosition: Int, endPosition: Int) {
-        Collections.swap(recipes, startPosition, endPosition)
+        //Collections.swap(recipes, startPosition, endPosition)
     }
 
-    override fun elected(recipeId: Long) {
-        TODO("Not yet implemented")
+    override fun liked(recipeId: Long) {
+        Log.e("AAA l",recipeId.toString())
+        recipes = recipes.map { recipe ->
+            if (recipe.id != recipeId) recipe
+            else {
+                recipe.copy(liked = !recipe.liked)
+            }
+        }
+
+        val recipe = recipes.firstOrNull() {
+            it.id==recipeId
+        }
+        Log.e("AAA l2",recipe?.liked.toString())
     }
+
+    override fun saveStateSwitch(key: String, b: Boolean) {
+        prefs.edit().putBoolean(key, b).apply()
+    }
+
+    override fun getStateSwitch(key: String): Boolean {
+        return prefs.getBoolean(key, true)
+    }
+
 
     companion object {
-        const val GENERATED_POST_AMOUNT = 1000
         const val RECIPES_PREFS_KEY = "posts"
         const val NEXT_ID_PREFS_KEY = "nextId"
     }

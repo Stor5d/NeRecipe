@@ -86,24 +86,24 @@ class RecipeCreateFragment : Fragment(){
         binding.categoryTextViewContent.setOnClickListener { setFilter() }
 
 
-        setFragmentResultListener(
-            requestKey = FilterFragmentSwitch.REQUEST_FILTER_KEY
-        ) { requestKey, bundle ->
-            if (requestKey != FilterFragmentSwitch.REQUEST_FILTER_KEY) return@setFragmentResultListener
-            filterList = bundle.getIntegerArrayList(FilterFragmentSwitch.FILTER_LIST_KEY)
-                ?: return@setFragmentResultListener
-            var categoryText = ""
-            filterList.forEach {
-                if (Categories.European.id == it) categoryText += Categories.European.key + "\n"
-                if (Categories.Asian.id == it) categoryText += Categories.Asian.key + "\n"
-                if (Categories.PanAsian.id == it) categoryText += Categories.PanAsian.key + "\n"
-                if (Categories.Eastern.id == it) categoryText += Categories.Eastern.key + "\n"
-                if (Categories.American.id == it) categoryText += Categories.American.key + "\n"
-                if (Categories.Russian.id == it) categoryText += Categories.Russian.key + "\n"
-                if (Categories.Mediterranean.id == it) categoryText += Categories.Mediterranean.key + "\n"
-            }
-            binding.categoryTextViewContent.text = categoryText
-        }
+//        setFragmentResultListener(
+//            requestKey = FilterFragmentSwitch.REQUEST_FILTER_KEY
+//        ) { requestKey, bundle ->
+//            if (requestKey != FilterFragmentSwitch.REQUEST_FILTER_KEY) return@setFragmentResultListener
+//            filterList = bundle.getIntegerArrayList(FilterFragmentSwitch.FILTER_LIST_KEY)
+//                ?: return@setFragmentResultListener
+//            var categoryText = ""
+//            filterList.forEach {
+//                if (Categories.European.id == it) categoryText += Categories.European.key + "\n"
+//                if (Categories.Asian.id == it) categoryText += Categories.Asian.key + "\n"
+//                if (Categories.PanAsian.id == it) categoryText += Categories.PanAsian.key + "\n"
+//                if (Categories.Eastern.id == it) categoryText += Categories.Eastern.key + "\n"
+//                if (Categories.American.id == it) categoryText += Categories.American.key + "\n"
+//                if (Categories.Russian.id == it) categoryText += Categories.Russian.key + "\n"
+//                if (Categories.Mediterranean.id == it) categoryText += Categories.Mediterranean.key + "\n"
+//            }
+//            binding.categoryTextViewContent.text = categoryText
+//        }
 
 
         val editText = binding.titleEditText

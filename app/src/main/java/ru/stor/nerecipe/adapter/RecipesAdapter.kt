@@ -54,7 +54,7 @@ internal class RecipesAdapter(
                 setOnMenuItemClickListener { menuItem ->
                     when (menuItem.itemId) {
                         R.id.remove -> {
-                            listener.onRemoveClicked(recipe)
+                            listener.onRemoveClicked(recipe.id)
                             true
                         }
                         R.id.edit -> {

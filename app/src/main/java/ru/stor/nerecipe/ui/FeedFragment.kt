@@ -5,28 +5,22 @@ import android.util.Log
 import android.view.*
 
 import android.view.inputmethod.EditorInfo
-import android.widget.Filter
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 
 import androidx.fragment.app.*
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import ru.stor.nerecipe.R
-import ru.stor.nerecipe.adapter.RecipesAdapter
 import ru.stor.nerecipe.adapter.RecyclerAdapter
-import ru.stor.nerecipe.adapter.StagesAdapter
 import ru.stor.nerecipe.classes.Recipe
 import ru.stor.nerecipe.classes.Stage
-import ru.stor.nerecipe.databinding.AddStageLayoutBinding.inflate
 import ru.stor.nerecipe.databinding.FeedFragmentBinding
 import ru.stor.nerecipe.viewModel.RecipeViewModel
 import java.util.*
-import java.util.zip.Inflater
-import kotlin.collections.ArrayList
 
 class FeedFragment : Fragment() {
 
@@ -37,13 +31,9 @@ class FeedFragment : Fragment() {
     private lateinit var emptyView: TextView
     private var recipeDisplayList = mutableListOf<Recipe>()
     private var recipeFullList = mutableListOf<Recipe>()
-    private var filterCategory: Boolean = false
-    private var filterFavorites: Boolean = false
-    val idsCategory = mutableSetOf<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
 
 //        viewModel.sharePostContent.observe(this) { postContent ->
@@ -114,11 +104,10 @@ class FeedFragment : Fragment() {
 //            swipeRefreshLayout.isRefreshing = false
 //        }
 
-        viewModel.data.observe(viewLifecycleOwner) { recipes ->
+       // viewModel.categoriesList.value = listOf(0,3)
+        viewModel.filtratedData.observe(viewLifecycleOwner) { recipes ->
             recipeFullList = recipes as MutableList<Recipe>
             recipeDisplayList = recipeFullList
-
-
 
 
             emptyData(recipeDisplayList.size)
@@ -158,7 +147,6 @@ class FeedFragment : Fragment() {
             ): Boolean {
                 val startPosition = viewHolder.layoutPosition
                 val endPosition = target.layoutPosition
-                Log.e("AAA", "v1 ${viewHolder.layoutPosition} v2 ${target.layoutPosition}")
                 viewModel.onMove(startPosition, endPosition)
                 recyclerView.adapter?.notifyItemMoved(startPosition, endPosition)
                 return true
@@ -200,20 +188,12 @@ class FeedFragment : Fragment() {
         val searchView: SearchView = searchItem.actionView as SearchView
         searchView.imeOptions = EditorInfo.IME_ACTION_DONE
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                val searchText = newText?.lowercase(Locale.getDefault())?.trim { it <= ' ' } ?: ""
-                recipeDisplayList = if (searchText.isEmpty()) recipeFullList else {
-                    recipeFullList.filter { recipe ->
-                        recipe.title.lowercase(Locale.getDefault()).contains(searchText)
-                    }.toMutableList()
-                }
-                emptyData(recipeDisplayList.size)
-                adapter.submitList(recipeDisplayList)
+                viewModel.searchQuery.value = newText
                 return true
             }
         })
