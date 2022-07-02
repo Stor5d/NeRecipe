@@ -40,7 +40,6 @@
             android:id="@+id/titleEditText"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:autofillHints="username"
             android:background="@color/white"
             android:hint="@string/title"
             android:inputType="text"
@@ -51,8 +50,7 @@
             app:layout_constraintBottom_toBottomOf="@id/titleViewStart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/titleViewStart"
-            app:layout_constraintTop_toBottomOf="@id/titleTextView"
-            android:saveEnabled="true"/>
+            app:layout_constraintTop_toBottomOf="@id/titleTextView" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/categoryViewStart"

@@ -4,24 +4,16 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 
-import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import androidx.appcompat.widget.SearchView
-import androidx.core.os.bundleOf
 
 import androidx.fragment.app.*
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import ru.stor.nerecipe.R
 import ru.stor.nerecipe.adapter.RecyclerAdapter
 import ru.stor.nerecipe.classes.Recipe
-import ru.stor.nerecipe.classes.Stage
 import ru.stor.nerecipe.databinding.FeedFragmentBinding
 import ru.stor.nerecipe.viewModel.RecipeViewModel
-import java.util.*
 
 class FeedFragment : Fragment() {
 
@@ -30,8 +22,9 @@ class FeedFragment : Fragment() {
     private lateinit var adapter: RecyclerAdapter
     private lateinit var recipeRecyclerView: RecyclerView
     private lateinit var emptyView: TextView
-    private var recipeDisplayList = mutableListOf<Recipe>()
-    private var recipeFullList = mutableListOf<Recipe>()
+  //  private var recipeDisplayList = mutableListOf<Recipe>()
+  //  private var recipeFullList = mutableListOf<Recipe>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,15 +69,8 @@ class FeedFragment : Fragment() {
             ) ?: return@setFragmentResultListener
             val categories = bundle.getIntegerArrayList(RecipeCreateFragment.CATEGORIES_KEY)
                 ?: return@setFragmentResultListener
-           val l = listOf<Stage>(
-               Stage(0,0,"Пожарить утку","google.com"),
-               Stage(0,0,"Перевернуть кушу","111.com"),
-               Stage(0,0,"Помешать суп","333.com")
-
-           )
-            val c = listOf(0,1,3)
-            val recipe = Recipe(0, titleRecipe, "My",false,l,c)
-            viewModel.onSaveRecipe(recipe)
+            Log.e("AAA","dohod")
+            viewModel.onSaveRecipe(titleRecipe)
         }
 
         viewModel.navigateToRecipeEditorScreenEvent.observe(viewLifecycleOwner) { recipe ->
@@ -106,16 +92,17 @@ class FeedFragment : Fragment() {
 
         // viewModel.categoriesList.value = listOf(0,3)
         viewModel.data.observe(viewLifecycleOwner) { recipes ->
-            recipeFullList = recipes as MutableList<Recipe>
-            recipeDisplayList = recipeFullList
-
-
-            emptyData(recipeDisplayList.size)
+//            recipeFullList = recipes as MutableList<Recipe>
+//            recipeDisplayList = recipeFullList
+//
+//
+            emptyData(recipes.size)
+            Log.e("AAA size", recipes[0].stages.size.toString())
             adapter.submitList(recipes)
         }
 
         binding.buttonAddRecipe.setOnClickListener {
-            viewModel.currentRecipe.value = null
+            viewModel.onInsertClicked()
             findNavController().navigate(R.id.action_feedFragment3_to_nav_graph_create_recipe3)
         }
 
@@ -167,7 +154,7 @@ class FeedFragment : Fragment() {
 //                    }
 //                }
 //            }
-  //      }
+//      }
 
 
 //    override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -1,7 +1,6 @@
 package ru.stor.nerecipe.ui
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -10,23 +9,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.transition.Transition
 import ru.stor.nerecipe.R
 import ru.stor.nerecipe.databinding.StageContentFragmentBinding
-import ru.stor.nerecipe.viewModel.RecipeViewModel
 import java.io.FileOutputStream
 
 
 class StageCreateFragment : Fragment(R.layout.stage_content_fragment) {
 
     private lateinit var binding: StageContentFragmentBinding
-    private val viewModel by activityViewModels<RecipeViewModel>()
     private var uriPhoto: Uri? = null
 
     override fun onCreateView(
@@ -38,16 +31,11 @@ class StageCreateFragment : Fragment(R.layout.stage_content_fragment) {
         binding = StageContentFragmentBinding.inflate(layoutInflater, container, false)
 
         val imageView = binding.imageStage
-//        Glide.with(this).load("https://avatarko.ru/img/kartinka/33/multfilm_lyagushka_32117.jpg")
-//            .override(1000, 1000).into(imageView)
 
         with(binding) {
             saveStage.setOnClickListener { onSaveButtonClicked() }
             imageStage.setOnClickListener {}
         }
-
-
-
         imageView.setOnClickListener {
 //            val intent = Intent().apply {
 //                putExtra("key1", "none")
@@ -113,11 +101,8 @@ class StageCreateFragment : Fragment(R.layout.stage_content_fragment) {
 
 
     companion object {
-
         const val STAGE_CONTENT_KEY = "stageContentKey"
         const val STAGE_URI_PHOTO_KEY = "uriPhotoKey"
         const val ADD_STAGE_REQUEST_KEY = "addStageRequestKey"
-
-
     }
 }

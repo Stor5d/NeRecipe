@@ -62,66 +62,64 @@ class FilterFragment : Fragment() {
     ) = FilterFragmentSwitchBinding.inflate(
         layoutInflater, container, false
     ).also { it ->
-
-        Log.e("AAA", "this FilterSwitch")
         binding = it
 
-//        with(binding) {
-//            switchEuropean.isChecked = viewModel.getStateSwitch(KEY_STATE_SWITCH_EUROPEAN)
-//            switchAsian.isChecked = viewModel.getStateSwitch(KEY_STATE_SWITCH_ASIAN)
-//            switchPanAsian.isChecked = viewModel.getStateSwitch(KEY_STATE_SWITCH_PAN_ASIAN)
-//            switchEastern.isChecked = viewModel.getStateSwitch(KEY_STATE_SWITCH_EASTERN)
-//            switchAmerican.isChecked = viewModel.getStateSwitch(KEY_STATE_SWITCH_AMERICAN)
-//            switchRussian.isChecked = viewModel.getStateSwitch(KEY_STATE_SWITCH_RUSSIAN)
-//            switchMediterranean.isChecked = viewModel.getStateSwitch(KEY_STATE_SWITCH_MEDITERRSNEAN)
-//        }
+        with(binding) {
+            switchEuropean.isChecked = viewModel.getStateSwitch(KEY_STATE_SWITCH_EUROPEAN)
+            switchAsian.isChecked = viewModel.getStateSwitch(KEY_STATE_SWITCH_ASIAN)
+            switchPanAsian.isChecked = viewModel.getStateSwitch(KEY_STATE_SWITCH_PAN_ASIAN)
+            switchEastern.isChecked = viewModel.getStateSwitch(KEY_STATE_SWITCH_EASTERN)
+            switchAmerican.isChecked = viewModel.getStateSwitch(KEY_STATE_SWITCH_AMERICAN)
+            switchRussian.isChecked = viewModel.getStateSwitch(KEY_STATE_SWITCH_RUSSIAN)
+            switchMediterranean.isChecked = viewModel.getStateSwitch(KEY_STATE_SWITCH_MEDITERRSNEAN)
+        }
 
-//        with(binding) {
-//
-//            switchEuropean.setOnClickListener {
-//                viewModel.saveStateSwitch(
-//                    KEY_STATE_SWITCH_EUROPEAN,
-//                    switchEuropean.isChecked
-//                )
-//            }
-//            switchAsian.setOnClickListener {
-//                viewModel.saveStateSwitch(
-//                    KEY_STATE_SWITCH_ASIAN,
-//                    switchAsian.isChecked
-//                )
-//            }
-//            switchPanAsian.setOnClickListener {
-//                viewModel.saveStateSwitch(
-//                    KEY_STATE_SWITCH_PAN_ASIAN,
-//                    switchPanAsian.isChecked
-//                )
-//            }
-//            switchEastern.setOnClickListener {
-//                viewModel.saveStateSwitch(
-//                    KEY_STATE_SWITCH_EASTERN,
-//                    switchEastern.isChecked
-//                )
-//            }
-//            switchAmerican.setOnClickListener {
-//                viewModel.saveStateSwitch(
-//                    KEY_STATE_SWITCH_AMERICAN,
-//                    switchAmerican.isChecked
-//                )
-//            }
-//            switchRussian.setOnClickListener {
-//                viewModel.saveStateSwitch(
-//                    KEY_STATE_SWITCH_RUSSIAN,
-//                    switchRussian.isChecked
-//                )
-//            }
-//            switchMediterranean.setOnClickListener {
-//                viewModel.saveStateSwitch(
-//                    KEY_STATE_SWITCH_MEDITERRSNEAN,
-//                    switchMediterranean.isChecked
-//                )
-//            }
-//
-//        }
+        with(binding) {
+
+            switchEuropean.setOnClickListener {
+                viewModel.saveStateSwitch(
+                    KEY_STATE_SWITCH_EUROPEAN,
+                    switchEuropean.isChecked
+                )
+            }
+            switchAsian.setOnClickListener {
+                viewModel.saveStateSwitch(
+                    KEY_STATE_SWITCH_ASIAN,
+                    switchAsian.isChecked
+                )
+            }
+            switchPanAsian.setOnClickListener {
+                viewModel.saveStateSwitch(
+                    KEY_STATE_SWITCH_PAN_ASIAN,
+                    switchPanAsian.isChecked
+                )
+            }
+            switchEastern.setOnClickListener {
+                viewModel.saveStateSwitch(
+                    KEY_STATE_SWITCH_EASTERN,
+                    switchEastern.isChecked
+                )
+            }
+            switchAmerican.setOnClickListener {
+                viewModel.saveStateSwitch(
+                    KEY_STATE_SWITCH_AMERICAN,
+                    switchAmerican.isChecked
+                )
+            }
+            switchRussian.setOnClickListener {
+                viewModel.saveStateSwitch(
+                    KEY_STATE_SWITCH_RUSSIAN,
+                    switchRussian.isChecked
+                )
+            }
+            switchMediterranean.setOnClickListener {
+                viewModel.saveStateSwitch(
+                    KEY_STATE_SWITCH_MEDITERRSNEAN,
+                    switchMediterranean.isChecked
+                )
+            }
+
+        }
 
 
 //       val adapter = RecipesAdapter(viewModel)

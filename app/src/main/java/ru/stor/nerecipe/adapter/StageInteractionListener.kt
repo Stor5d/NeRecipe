@@ -4,7 +4,7 @@ import ru.stor.nerecipe.classes.Stage
 
 interface StageInteractionListener {
 
-    fun onRemoveClicked(stage: Stage)
-    fun onUpClicked(stage: Stage)
-    fun onDownClicked(stage: Stage)
+    fun onRemoveStageClicked(stage: Stage)
+    fun onSaveStageClicked(content: String, uriPhoto: String?)
+    fun onMoveStageClicked(stage: Stage)
 }

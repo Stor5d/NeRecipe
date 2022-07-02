@@ -44,7 +44,8 @@ internal class StagesAdapter(
                             true
                         }
                         R.id.remove -> {
-                            listener.onRemoveClicked(stage)
+
+                            listener.onRemoveStageClicked(stage)
                             true
                         }
                         else -> false
@@ -70,8 +71,8 @@ internal class StagesAdapter(
         fun bind(stage: Stage, position: Int) {
             this.stage = stage
             with(binding) {
-                val positionStage = position + 1
-                textViewStageContent.text = stage.content + "/" + stage.id
+                val positionStage = layoutPosition + 1
+                textViewStageContent.text = stage.content + "/" + stage.id + "/" + stage.uriPhoto
                 textViewCaptionStage.text = "Шаг $positionStage"
                 if (stage.uriPhoto != null) {
                     imageStage.visibility = View.VISIBLE

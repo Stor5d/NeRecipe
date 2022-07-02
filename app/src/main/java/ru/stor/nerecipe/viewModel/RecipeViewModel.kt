@@ -10,45 +10,36 @@ import ru.stor.nerecipe.adapter.StageInteractionListener
 import ru.stor.nerecipe.classes.Recipe
 import ru.stor.nerecipe.classes.Stage
 import ru.stor.nerecipe.data.impl.SQLiteRecipeRepository
+import ru.stor.nerecipe.data.impl.SharedPrefsRecipeRepository
+import ru.stor.nerecipe.dataSettings.SettingsRepository
+import ru.stor.nerecipe.dataSettings.SharedPrefsSettingsRepository
 import ru.stor.nerecipe.db.AppDb
 import ru.stor.nerecipe.util.SingleLiveEvent
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application),
-    RecipeInteractionListener, StageInteractionListener {
+    RecipeInteractionListener, StageInteractionListener, SettingsRepository {
 
     private val repository: RecipeRepository = SQLiteRecipeRepository(
         dao = AppDb.getInstance(
             context = application
         ).recipeDao
     )
+    private val repositorySettings: SettingsRepository = SharedPrefsSettingsRepository(application)
 
     val data by repository::data
 
     // val data: MutableLiveData<List<Recipe>> = repository.data as MutableLiveData<List<Recipe>>
-    val filtratedData: MediatorLiveData<List<Recipe>> = MediatorLiveData()
-    val searchQuery: MutableLiveData<String> = MutableLiveData()
-    val categoriesList: MutableLiveData<List<Int>> = MutableLiveData()
-    var favoriteFilter: MutableLiveData<Boolean> = MutableLiveData()
+//    val filtratedData: MediatorLiveData<List<Recipe>> = MediatorLiveData()
+//    val searchQuery: MutableLiveData<String> = MutableLiveData()
+//    val categoriesList: MutableLiveData<List<Int>> = MutableLiveData()
+//    var favoriteFilter: MutableLiveData<Boolean> = MutableLiveData()
     val navigateToRecipeEditorScreenEvent = SingleLiveEvent<Recipe>()
-    val navigateToRecipeEvent = SingleLiveEvent<Long>()
-    val currentRecipe = SingleLiveEvent<Recipe>()
-    private val stages: MutableLiveData<List<Stage>> = MutableLiveData()
+    private val navigateToRecipeEvent = SingleLiveEvent<Long>()
+    private val currentRecipe = SingleLiveEvent<Recipe>()
+
+    // private val stages: MutableLiveData<List<Stage>> = MutableLiveData()
     private var currentStages: MutableList<Stage> = mutableListOf()
     private var stageNextId = 0
-
-    fun getStages(): LiveData<List<Stage>> {
-        return stages
-    }
-
-    fun addStage(content: String, uriPhoto: String?) {
-        if (content.isNotBlank()) {
-            stageNextId++
-            val stage =
-                Stage(id = stageNextId, recipeId = 0, content = content, uriPhoto = uriPhoto)
-            currentStages.add(stage)
-            stages.value = currentStages
-        }
-    }
 
 
     init {
@@ -112,14 +103,38 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
 //        }
 //    }
 
+    fun getCurrentRecipe(): SingleLiveEvent<Recipe> {
+        return currentRecipe
+    }
+
+    fun onInsertClicked() {
+        val recipe = Recipe(0, "", "My", false, listOf(), listOf(0))
+        currentRecipe.value = recipe
+    }
+
     override fun onEditClicked(recipe: Recipe) {
         currentRecipe.value = recipe
+        currentStages = recipe.stages as MutableList<Stage>
         navigateToRecipeEditorScreenEvent.value = recipe
     }
 
-    fun onSaveRecipe(recipe: Recipe) {
-        repository.insert(recipe)
+    fun onSaveRecipe(title: String) {
+        val recipe = currentRecipe.value?.copy(title = title)
+        if (recipe != null) {
+            if (recipe.id == 0L) {
+                Log.e("AAA id", recipe.id.toString())
+                repository.insert(recipe)
+            } else {
+                repository.update(recipe)
+            }
+
+        }
+        stageNextId = 0
         currentRecipe.value = null
+    }
+
+    fun setTitleCurrentRecipe(title: String) {
+        currentRecipe.value = currentRecipe.value?.copy(title = title)
     }
 
     fun setupSwitchSettingsCurrentRecipe(list: List<Int>) {
@@ -177,19 +192,41 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
         repository.liked(recipeId)
     }
 
-    override fun onRemoveClicked(stage: Stage) {
-        Log.e("AAAA stageId", stage.id.toString())
-        currentStages = currentStages.filterNot { it.id == stage.id } as MutableList<Stage>
-        stages.value = currentStages
+    override fun onRemoveStageClicked(stage: Stage) {
+        var currentStages: MutableList<Stage> = currentRecipe.value?.stages as MutableList<Stage>
+        currentStages = currentStages.filterNot { it.id == stage.id }.toMutableList()
+        currentRecipe.value = currentRecipe.value?.copy(stages = currentStages)
     }
 
-    override fun onUpClicked(stage: Stage) {
+    override fun onSaveStageClicked(content: String, uriPhoto: String?) {
+        if (content.isNotBlank()) {
+            stageNextId++
+            val stage =
+                Stage(id = stageNextId, recipeId = 0, content = content, uriPhoto = uriPhoto)
+            if (currentRecipe.value != null) {
+                currentStages = if (currentRecipe.value?.stages?.isNotEmpty() == true) {
+                    currentRecipe.value?.stages as MutableList<Stage>
+                } else mutableListOf()
+            } else {
+                currentStages = mutableListOf()
+            }
+            currentStages.add(stage)
+            currentRecipe.value = currentRecipe.value?.copy(stages = currentStages)
+        }
+    }
+
+    override fun onMoveStageClicked(stage: Stage) {
         TODO("Not yet implemented")
     }
 
-    override fun onDownClicked(stage: Stage) {
-        TODO("Not yet implemented")
+    override fun saveStateSwitch(key: String, b: Boolean) {
+        repositorySettings.saveStateSwitch(key, b)
     }
+
+    override fun getStateSwitch(key: String): Boolean {
+        return repositorySettings.getStateSwitch(key)
+    }
+
 //
 //    fun onShareClickedPost() {
 //        repository.share(currentPostId)

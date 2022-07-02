@@ -24,7 +24,7 @@ class RecipeViewFragment : Fragment() {
     ) = RecipeViewFragmentBinding.inflate(
         layoutInflater, container, false
     ).also { binding ->
-        viewModel.currentRecipe.observe(viewLifecycleOwner) { recipe ->
+        viewModel.getCurrentRecipe().observe(viewLifecycleOwner) { recipe ->
             binding.recipeName.text = recipe.title
             binding.authorName.text = recipe.author
             binding.category.text = recipe.id.toString()

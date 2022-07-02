@@ -109,14 +109,23 @@ class RecipeCreateFragment : Fragment() {
 
             buttonSave.setOnClickListener { onSaveButtonClicked(binding) }
             buttonCancel.setOnClickListener { onCancelButtonClicked() }
-            categoryViewStart.setOnClickListener { setFilter() }
-            categoryTextViewCaption.setOnClickListener { setFilter() }
-            categoryTextViewContent.setOnClickListener { setFilter() }
-            stageAddButton.setOnClickListener { createStage() }
+            categoryViewStart.setOnClickListener {
+                viewModel.setTitleCurrentRecipe(titleEditText.text.toString())
+                setFilter()
+            }
+            categoryTextViewCaption.setOnClickListener {
+                viewModel.setTitleCurrentRecipe(titleEditText.text.toString())
+                setFilter()
+            }
+            categoryTextViewContent.setOnClickListener {
+                viewModel.setTitleCurrentRecipe(titleEditText.text.toString())
+                setFilter()
+            }
+            stageAddButton.setOnClickListener {
+                viewModel.setTitleCurrentRecipe(titleEditText.text.toString())
+                createStage()
+            }
         }
-
-
-
 
         setFragmentResultListener(
             requestKey = StageCreateFragment.ADD_STAGE_REQUEST_KEY
@@ -126,23 +135,22 @@ class RecipeCreateFragment : Fragment() {
                 StageCreateFragment.STAGE_CONTENT_KEY
             ) ?: return@setFragmentResultListener
             val uriPhoto = bundle.getString(StageCreateFragment.STAGE_URI_PHOTO_KEY)
-            viewModel.addStage(content=content,uriPhoto=uriPhoto)
+            viewModel.onSaveStageClicked(content = content, uriPhoto = uriPhoto)
         }
 
-
-
-        viewModel.currentRecipe.observe(viewLifecycleOwner) { recipe ->
+        viewModel.getCurrentRecipe().observe(viewLifecycleOwner) { recipe ->
             if (recipe != null) {
                 currentRecipe = recipe
                 bind(recipe)
+                adapter.submitList(recipe.stages)
             }
         }
 
-        viewModel.getStages().observe(viewLifecycleOwner) { stages ->
-            if (stages != null) {
-                adapter.submitList(stages)
-            }
-        }
+//        viewModel.getStages().observe(viewLifecycleOwner) { stages ->
+//            if (stages != null) {
+//
+//            }
+//        }
 
 
 //        val adapter = StagesAdapter(viewModelStage)

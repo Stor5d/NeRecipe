@@ -84,7 +84,7 @@ internal class RecyclerAdapter(
             this.recipe = recipe
             with(binding) {
                 itemTextView.text = recipe.title// + " | " + recipe.categories
-                authorName.text = recipe.author + " | " + recipe.id
+                authorName.text = recipe.author + " | " + recipe.id + " | " + recipe.stages.size.toString()
                 categoryTextViewContent.text =
                     RecipeCreateFragment.getCategoriesText(recipe.categories)
                 likeButton.isChecked = recipe.liked

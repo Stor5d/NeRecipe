@@ -24,17 +24,27 @@ class SQLiteRecipeRepository(
         dao.removeById(recipeId)
     }
 
+    @Transaction
     override fun update(recipe: Recipe) {
-        dao.updateContentById(recipe.id, recipe.title)
+        dao.removeById(recipe.id)
+        val id = dao.insertRecipe(recipe.toEntity(0).recipeEntity)
+        recipe.toEntity(id).stagesEntity.map {
+            dao.insertStage(it.copy(id = 0))
+        }
+//        dao.updateContentById(
+//            recipe.id,
+//            recipe.title,
+//            recipe.categories,
+//            recipe.liked,
+//            recipe.author
+//        )
     }
 
     @Transaction
     override fun insert(recipe: Recipe) {
         val id = dao.insertRecipe(recipe.toEntity(0).recipeEntity)
         recipe.toEntity(id).stagesEntity.map {
-            dao.insertStage(it)
+            dao.insertStage(it.copy(id = 0))
         }
-
     }
-
 }
