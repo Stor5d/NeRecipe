@@ -59,9 +59,9 @@ class SharedPrefsRecipeRepository(
         recipes = recipes.filterNot { recipe -> recipe.id == recipeId }
     }
 
-    override fun move(startPosition: Int, endPosition: Int) {
-        //Collections.swap(recipes, startPosition, endPosition)
-    }
+//    override fun move(startPosition: Int, endPosition: Int) {
+//        //Collections.swap(recipes, startPosition, endPosition)
+//    }
 
     override fun liked(recipeId: Long) {
         Log.e("AAA l",recipeId.toString())
@@ -78,13 +78,13 @@ class SharedPrefsRecipeRepository(
         Log.e("AAA l2",recipe?.liked.toString())
     }
 
-    override fun saveStateSwitch(key: String, b: Boolean) {
-        prefs.edit().putBoolean(key, b).apply()
-    }
-
-    override fun getStateSwitch(key: String): Boolean {
-        return prefs.getBoolean(key, true)
-    }
+//    override fun saveStateSwitch(key: String, b: Boolean) {
+//        prefs.edit().putBoolean(key, b).apply()
+//    }
+//
+//    override fun getStateSwitch(key: String): Boolean {
+//        return prefs.getBoolean(key, true)
+//    }
 
 
     companion object {

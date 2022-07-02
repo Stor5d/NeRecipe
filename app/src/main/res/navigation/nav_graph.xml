@@ -2,18 +2,9 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/feedFragment">
-
+    app:startDestination="@id/bottomFragment">
     <fragment
-        android:id="@+id/feedFragment"
-        android:name="ru.stor.nerecipe.ui.FeedFragment"
-        android:label="FeedFragment" >
-    </fragment>
-
-    <fragment
-        android:id="@+id/filterFragmentSwitch"
-        android:name="ru.stor.nerecipe.ui.FilterFragmentSwitch"
-        android:label="FilterFragmentSwitch" />
-
-
+        android:id="@+id/bottomFragment"
+        android:name="ru.stor.nerecipe.ui.BottomFragment"
+        android:label="BottomFragment" />
 </navigation>

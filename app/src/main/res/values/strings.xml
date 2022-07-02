@@ -31,7 +31,8 @@
     <string name="filter_category_American">American</string>
     <string name="filter_category_Russian">Russian</string>
     <string name="filter_category_Mediterranean">Mediterranean</string>
-    <string name="category">Categories:</string>
+    <string name="category">Categories</string>
+    <string name="categoryCaption">Categories:</string>
     <string name="cooking">Cooking</string>
     <string name="step">Step</string>
     <string name="add_stage">Add stage</string>

@@ -15,7 +15,7 @@ class RecipeViewFragment : Fragment() {
 
 
     private val viewModel by activityViewModels<RecipeViewModel>()
-    private val args by navArgs<RecipeViewFragmentArgs>()
+   // private val args by navArgs<RecipeViewFragmentArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

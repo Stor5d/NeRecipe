@@ -32,7 +32,8 @@
     <string name="filter_category_American">Американская</string>
     <string name="filter_category_Russian">Русская</string>
     <string name="filter_category_Mediterranean">Средиземноморская</string>
-    <string name="category">Категории:</string>
+    <string name="category">Категории</string>
+    <string name="categoryCaption">Категории:</string>
     <string name="cooking">Приготовление</string>
     <string name="step">Шаг</string>
     <string name="add_stage">Добавить шаг</string>

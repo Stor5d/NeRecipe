@@ -10,9 +10,5 @@ interface RecipeRepository {
     fun insert(recipe: Recipe)
     fun update(recipe: Recipe)
     fun delete(recipeId:Long)
-    fun move(startPosition: Int, endPosition: Int)
     fun liked(recipeId:Long)
-    fun saveStateSwitch(key:String,b:Boolean)
-    fun getStateSwitch(key:String):Boolean
-
 }

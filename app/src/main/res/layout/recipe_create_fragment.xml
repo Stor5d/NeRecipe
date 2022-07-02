@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/titleViewStart"
             android:layout_width="6dp"
             android:layout_height="48dp"
@@ -21,7 +21,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/titleTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
             app:layout_constraintStart_toEndOf="@id/titleViewStart"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/titleEditText"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -54,7 +54,7 @@
             app:layout_constraintTop_toBottomOf="@id/titleTextView"
             android:saveEnabled="true"/>
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/categoryViewStart"
             android:layout_width="6dp"
             android:layout_height="0dp"
@@ -64,7 +64,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/categoryTextViewCaption" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/categoryTextViewCaption"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
             app:layout_constraintTop_toBottomOf="@id/titleViewStart"
             app:layout_goneMarginTop="6dp" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/categoryTextViewContent"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
             app:layout_constraintTop_toBottomOf="@id/categoryTextViewCaption"
             tools:text="Русская" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/stageTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -110,34 +110,45 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/categoryTextViewContent" />
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/stageAddButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:contentDescription="@string/add_stage"
             android:src="@drawable/ic_add_stage_24dp"
+            android:layout_marginEnd="12dp"
             app:layout_constraintBottom_toBottomOf="@id/stageTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/stageTextView" />
 
-        <Button
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/stageRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/stageTextView"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/card_stage_layout"/>
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Create"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/buttonCancel"
-            app:layout_constraintTop_toBottomOf="@id/stageTextView"/>
+            app:layout_constraintTop_toBottomOf="@id/stageRecyclerView"/>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cancel"
             app:layout_constraintStart_toEndOf="@id/buttonSave"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/stageTextView"/>
+            app:layout_constraintTop_toBottomOf="@id/stageRecyclerView"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
