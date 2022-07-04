@@ -1,28 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="author_description">Author avatar</string>
-    <string name="thousand">%1$sK</string>
-    <string name="million">%1$sM</string>
-
-    <string name="post_text">Post Text</string>
-    <string name="edit">Edit</string>
-    <string name="description_post_menu">Post menu</string>
-    <string name="description_post_like">Like</string>
-    <string name="description_post_share">Share</string>
-    <string name="description_post_view">View</string>
-    <string name="description_post_save">Save</string>
-    <string name="edit_caption">Edit</string>
-    <string name="chooser_share_post">Share Post</string>
-    <string name="video">Video</string>
-    <string name="new_message">Enter your message</string>
-    <string name="notification_user_liked">User %1$s liked %2$s\'s post</string>
-    <string name="channel_remote_name">Server notifications</string>
-    <string name="channel_remote_description">Notifications from remote server</string>
-    <string name="notification_user_new_post">%1$s published a new post</string>
-
 
     <string name="app_name">Мои рецепты</string>
-    <string name="recipes">Recipes!</string>
+    <string name="recipes">Рецепты!</string>
     <string name="create_recipe">Создать рецепт</string>
     <string name="title_recipe">Название</string>
     <string name="filter_category_European">Европейская</string>
@@ -50,5 +30,12 @@
     <string name="favorites">Избранное</string>
     <string name="list_empty">Список пуст</string>
     <string name="description_recipe_like" />
+    <string name="menu_stage">Меню шага</string>
+    <string name="create">Создать</string>
+    <string name="cancel">Отмена</string>
+    <string name="stage">Шаг</string>
+    <string name="save_stage">Сохранить шаг</string>
+    <string name="description_recipe_menu">Меню рецепта</string>
+    <string name="edit">Изменить</string>
 
 </resources>

@@ -67,24 +67,20 @@ internal class RecyclerAdapter(
                     .show()
             }
             binding.likeButton.setOnClickListener { listener.onLikeClicked(recipe.id) }
-//            binding.shareButton.setOnClickListener { listener.onShareClicked(post) }
             binding.menuButton.setOnClickListener { popupMenu.show() }
-//            binding.play.setOnClickListener { listener.onPlayClicked(post) }
-//            binding.preView.setOnClickListener { listener.onPlayClicked(post) }
-//            binding.avatar.setOnClickListener { listener.onToPost(post) }
-//            binding.recipeName.setOnClickListener { listener.onToRecipe(recipe) }
-//            binding.authorName.setOnClickListener { listener.onToRecipe(recipe) }
-//            binding.category.setOnClickListener { listener.onToRecipe(recipe) }
-//            binding.date.setOnClickListener { listener.onToPost(post) }
-//            binding.contentEditText.setOnClickListener { listener.onToPost(post) }
+            binding.cardView.setOnClickListener { listener.onToRecipe(recipe) }
+            binding.authorName.setOnClickListener { listener.onToRecipe(recipe) }
+            binding.title.setOnClickListener { listener.onToRecipe(recipe) }
+            binding.categoryTextViewCaption.setOnClickListener { listener.onToRecipe(recipe) }
+            binding.categoryTextViewContent.setOnClickListener { listener.onToRecipe(recipe) }
         }
-
 
         fun bind(recipe: Recipe) {
             this.recipe = recipe
             with(binding) {
-                itemTextView.text = recipe.title// + " | " + recipe.categories
-                authorName.text = recipe.author + " | " + recipe.id + " | " + recipe.stages.size.toString()
+                itemTextView.text = recipe.title
+                authorName.text =
+                    recipe.author
                 categoryTextViewContent.text =
                     RecipeCreateFragment.getCategoriesText(recipe.categories)
                 likeButton.isChecked = recipe.liked
@@ -95,12 +91,10 @@ internal class RecyclerAdapter(
 
 object DiffCallback : DiffUtil.ItemCallback<Recipe>() {
 
-    override fun areItemsTheSame(oldItem: Recipe, newItem: Recipe): Boolean {
-        return oldItem.id == newItem.id
-    }
+    override fun areItemsTheSame(oldItem: Recipe, newItem: Recipe): Boolean =
+        oldItem.id == newItem.id
 
 
     override fun areContentsTheSame(oldItem: Recipe, newItem: Recipe): Boolean =
         oldItem == newItem
-
 }

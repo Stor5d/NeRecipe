@@ -1,20 +1,19 @@
 package ru.stor.nerecipe.viewModel
 
 import android.app.Application
-import android.icu.text.Transliterator
-import android.util.Log
 import androidx.lifecycle.*
 import ru.stor.nerecipe.data.RecipeRepository
 import ru.stor.nerecipe.adapter.RecipeInteractionListener
 import ru.stor.nerecipe.adapter.StageInteractionListener
+import ru.stor.nerecipe.classes.Categories
 import ru.stor.nerecipe.classes.Recipe
 import ru.stor.nerecipe.classes.Stage
 import ru.stor.nerecipe.data.impl.SQLiteRecipeRepository
-import ru.stor.nerecipe.data.impl.SharedPrefsRecipeRepository
 import ru.stor.nerecipe.dataSettings.SettingsRepository
 import ru.stor.nerecipe.dataSettings.SharedPrefsSettingsRepository
 import ru.stor.nerecipe.db.AppDb
 import ru.stor.nerecipe.util.SingleLiveEvent
+import java.util.*
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application),
     RecipeInteractionListener, StageInteractionListener, SettingsRepository {
@@ -26,82 +25,59 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
     )
     private val repositorySettings: SettingsRepository = SharedPrefsSettingsRepository(application)
 
-    val data by repository::data
+    val data: LiveData<List<Recipe>> = repository.data as MutableLiveData<List<Recipe>>
 
-    // val data: MutableLiveData<List<Recipe>> = repository.data as MutableLiveData<List<Recipe>>
-//    val filtratedData: MediatorLiveData<List<Recipe>> = MediatorLiveData()
-//    val searchQuery: MutableLiveData<String> = MutableLiveData()
-//    val categoriesList: MutableLiveData<List<Int>> = MutableLiveData()
-//    var favoriteFilter: MutableLiveData<Boolean> = MutableLiveData()
+    val filtratedData: MediatorLiveData<List<Recipe>> = MediatorLiveData()
+    val searchQuery: MutableLiveData<String> = MutableLiveData()
     val navigateToRecipeEditorScreenEvent = SingleLiveEvent<Recipe>()
-    private val navigateToRecipeEvent = SingleLiveEvent<Long>()
+    val navigateToRecipeEvent = SingleLiveEvent<Long>()
     private val currentRecipe = SingleLiveEvent<Recipe>()
+    private val categoryList = mutableSetOf<Int>()
 
-    // private val stages: MutableLiveData<List<Stage>> = MutableLiveData()
     private var currentStages: MutableList<Stage> = mutableListOf()
     private var stageNextId = 0
 
-
-    init {
-//        favoriteFilter.value = false
-//        categoriesList.value = updateCategoryList()
-//
-//        filtratedData.addSource(data) {
-//            multiFilter()
-//        }
-//        filtratedData.addSource(searchQuery) {
-//            multiFilter()
-//        }
-//        filtratedData.addSource(categoriesList) {
-//            multiFilter()
-//        }
-//        filtratedData.addSource(favoriteFilter) {
-//            multiFilter()
-//        }
+    private fun searchFilter() {
+        val searchText = searchQuery.value?.lowercase(Locale.getDefault())?.trim { it <= ' ' } ?: ""
+        if (searchText.isNotEmpty() || data.value != null) {
+            filtratedData.value = data.value?.filter { recipe ->
+                recipe.title.lowercase(Locale.getDefault()).contains(searchText)
+            }
+        }
     }
 
+    init {
+        val list = mutableSetOf<Int>()
+        if (repositorySettings.getStateSwitch(Categories.European.key)) {
+            list.add(Categories.European.id)
+        }
+        if (repositorySettings.getStateSwitch(Categories.Asian.key)) {
+            list.add(Categories.Asian.id)
+        }
+        if (repositorySettings.getStateSwitch(Categories.PanAsian.key)) {
+            list.add(Categories.PanAsian.id)
+        }
+        if (repositorySettings.getStateSwitch(Categories.Eastern.key)) {
+            list.add(Categories.Eastern.id)
+        }
+        if (repositorySettings.getStateSwitch(Categories.American.key)) {
+            list.add(Categories.American.id)
+        }
+        if (repositorySettings.getStateSwitch(Categories.Russian.key)) {
+            list.add(Categories.Russian.id)
+        }
+        if (repositorySettings.getStateSwitch(Categories.Mediterranean.key)) {
+            list.add(Categories.Mediterranean.id)
+        }
+        repository.setFilter(list)
 
-//    private fun updateCategoryList(): List<Int> {
-//        val list = mutableListOf<Int>()
-//        if (repository.getStateSwitch(FilterFragmentSwitch.KEY_STATE_SWITCH_EUROPEAN)) list.add(0)
-//        if (repository.getStateSwitch(FilterFragmentSwitch.KEY_STATE_SWITCH_ASIAN)) list.add(1)
-//        if (repository.getStateSwitch(FilterFragmentSwitch.KEY_STATE_SWITCH_PAN_ASIAN)) list.add(2)
-//        if (repository.getStateSwitch(FilterFragmentSwitch.KEY_STATE_SWITCH_EASTERN)) list.add(3)
-//        if (repository.getStateSwitch(FilterFragmentSwitch.KEY_STATE_SWITCH_AMERICAN)) list.add(4)
-//        if (repository.getStateSwitch(FilterFragmentSwitch.KEY_STATE_SWITCH_RUSSIAN)) list.add(5)
-//        if (repository.getStateSwitch(FilterFragmentSwitch.KEY_STATE_SWITCH_MEDITERRSNEAN)) list
-//            .add(6)
-//        return list
-//    }
-
-//    fun saveStateSwitch(key: String, b: Boolean) {
-//        repository.saveStateSwitch(key, b)
-//        categoriesList.value = updateCategoryList()
-//    }
-//
-//    fun getStateSwitch(key: String): Boolean {
-//        return repository.getStateSwitch(key)
-//    }
-
-//    private fun multiFilter() {
-//        val searchText = searchQuery.value?.lowercase(Locale.getDefault())?.trim { it <= ' ' } ?: ""
-//        if (searchText.isNotEmpty() || data.value != null || categoriesList.value != null) {
-//            val list = data.value?.filter { recipe ->
-//                recipe.title.lowercase(Locale.getDefault()).contains(searchText)
-//            }?.filter {
-//                it.categories.forEach { categoryId ->
-//                    if (categoriesList.value!!.contains(categoryId)) return@filter true
-//                }
-//                return@filter false
-//            }
-//            val listFavorite = if (favoriteFilter.value==true) list?.filter{recipe->
-//                recipe.liked
-//            } else list
-//            filtratedData.value = listFavorite
-//        } else {
-//            filtratedData.value = data.value
-//        }
-//    }
+        filtratedData.addSource(data) {
+            searchFilter()
+        }
+        filtratedData.addSource(searchQuery) {
+            searchFilter()
+        }
+    }
 
     fun getCurrentRecipe(): SingleLiveEvent<Recipe> {
         return currentRecipe
@@ -122,12 +98,10 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
         val recipe = currentRecipe.value?.copy(title = title)
         if (recipe != null) {
             if (recipe.id == 0L) {
-                Log.e("AAA id", recipe.id.toString())
                 repository.insert(recipe)
             } else {
                 repository.update(recipe)
             }
-
         }
         stageNextId = 0
         currentRecipe.value = null
@@ -141,52 +115,12 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
         currentRecipe.value = currentRecipe.value?.copy(categories = list)
     }
 
-    //        fun onSaveButtonClicked(content: String) {
-//        if (content.isBlank()) return
-//        if(currentPostId==-1L) {
-//            repository.insert(Post(
-//                id = PostRepository.NEW_POST_ID,
-//                author = "Me",
-//                content = content,
-//                published = "Today"
-//            ))
-//        } else {
-//            getPost(currentPostId)?.copy(content = content)?.let { repository.update(it) }
-//        }
-//        currentPostId = -1
-//    }
-//
-//    override fun onLikeClicked(post: Post) = repository.liked(post.id)
-//
-//    override fun onShareClicked(post: Post) {
-//        repository.share(post.id)
-//        sharePostContent.value = post.content
-//    }
-//
     override fun onRemoveClicked(recipeId: Long) = repository.delete(recipeId)
 
-    //    override fun onEditClicked(post: Post) {
-//        currentPostId = post.id
-//        navigateToPostContentScreenEvent.value = post.content
-//    }
-//
-//    override fun onPlayClicked(post: Post) {
-//        playPostVideo.value = post.urlVideo
-//    }
-//
     override fun onToRecipe(recipe: Recipe) {
         navigateToRecipeEvent.value = recipe.id
         currentRecipe.value = recipe
     }
-
-//    fun onMove(startPosition: Int, endPosition: Int) {
-//        repository.move(startPosition, endPosition)
-//    }
-
-    fun onAddRecipeClicked() {
-        //navigateToPostContentScreenEvent.call()
-    }
-
 
     override fun onLikeClicked(recipeId: Long) {
         repository.liked(recipeId)
@@ -203,12 +137,12 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
             stageNextId++
             val stage =
                 Stage(id = stageNextId, recipeId = 0, content = content, uriPhoto = uriPhoto)
-            if (currentRecipe.value != null) {
-                currentStages = if (currentRecipe.value?.stages?.isNotEmpty() == true) {
+            currentStages = if (currentRecipe.value != null) {
+                if (currentRecipe.value?.stages?.isNotEmpty() == true) {
                     currentRecipe.value?.stages as MutableList<Stage>
                 } else mutableListOf()
             } else {
-                currentStages = mutableListOf()
+                mutableListOf()
             }
             currentStages.add(stage)
             currentRecipe.value = currentRecipe.value?.copy(stages = currentStages)
@@ -220,34 +154,68 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
     }
 
     override fun saveStateSwitch(key: String, b: Boolean) {
+        setupCategories(key, b)
         repositorySettings.saveStateSwitch(key, b)
     }
 
     override fun getStateSwitch(key: String): Boolean {
-        return repositorySettings.getStateSwitch(key)
+        val b = repositorySettings.getStateSwitch(key)
+        setupCategories(key, b)
+        return b
     }
 
-//
-//    fun onShareClickedPost() {
-//        repository.share(currentPostId)
-//        sharePostContent.value = getPost(currentPostId)?.content
-//    }
-//
-//
-//    fun onRemoveClickedPost() {
-//        repository.delete(currentPostId)
-//    }
-//
-//    fun onEditClickedPost() {
-//        navigateToPostContentScreenEvent.value = getPost(currentPostId)?.content
-//    }
-//
-//    fun onPlayClickedPost() {
-//        playPostVideo.value = getPost(currentPostId)?.urlVideo
-//    }
-//
-//    private fun getPost(postId: Long) = data.value?.firstOrNull { post ->
-//        post.id == postId
-//    }
+    private fun setupCategories(key: String, b: Boolean) {
+        if (key == Categories.European.key) {
+            if (b) {
+                categoryList.add(Categories.European.id)
+            } else {
+                categoryList.remove(Categories.European.id)
+            }
+        }
+        if (key == Categories.Asian.key) {
+            if (b) {
+                categoryList.add(Categories.Asian.id)
+            } else {
+                categoryList.remove(Categories.Asian.id)
+            }
+        }
+        if (key == Categories.PanAsian.key) {
+            if (b) {
+                categoryList.add(Categories.PanAsian.id)
+            } else {
+                categoryList.remove(Categories.PanAsian.id)
+            }
+        }
+        if (key == Categories.Eastern.key) {
+            if (b) {
+                categoryList.add(Categories.Eastern.id)
+            } else {
+                categoryList.remove(Categories.Eastern.id)
+            }
+        }
+        if (key == Categories.American.key) {
+            if (b) {
+                categoryList.add(Categories.American.id)
+            } else {
+                categoryList.remove(Categories.American.id)
+            }
+        }
+        if (key == Categories.Russian.key) {
+            if (b) {
+                categoryList.add(Categories.Russian.id)
+            } else {
+                categoryList.remove(Categories.Russian.id)
+            }
+        }
+        if (key == Categories.Mediterranean.key) {
+            if (b) {
 
+                categoryList.add(Categories.Mediterranean.id)
+            } else {
+
+                categoryList.remove(Categories.Mediterranean.id)
+            }
+        }
+        repository.setFilter(categoryList)
+    }
 }

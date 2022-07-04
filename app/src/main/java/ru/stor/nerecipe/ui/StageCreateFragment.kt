@@ -1,7 +1,6 @@
 package ru.stor.nerecipe.ui
 
-import android.content.Context
-import android.graphics.Bitmap
+
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,8 +13,6 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import ru.stor.nerecipe.R
 import ru.stor.nerecipe.databinding.StageContentFragmentBinding
-import java.io.FileOutputStream
-
 
 class StageCreateFragment : Fragment(R.layout.stage_content_fragment) {
 
@@ -36,36 +33,10 @@ class StageCreateFragment : Fragment(R.layout.stage_content_fragment) {
             saveStage.setOnClickListener { onSaveButtonClicked() }
             imageStage.setOnClickListener {}
         }
+
         imageView.setOnClickListener {
-//            val intent = Intent().apply {
-//                putExtra("key1", "none")
-//                action = Intent.ACTION_GET_CONTENT
-//                type = "image/*"
-//            }
             result.launch("image/*")
-            //  val shareIntent = Intent.createChooser(intent, getString(R.string.chooser_share_post))
-            //  startActivityForResult(shareIntent, IMAGE_KEY)
         }
-
-
-//        ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
-//                new ActivityResultContracts.StartActivityForResult(),
-//        new ActivityResultCallback<ActivityResult>() {
-//            @Override
-//            public void onActivityResult(ActivityResult result) {
-//                if (result.getResultCode() == Activity.RESULT_OK) {
-//                    // There are no request codes
-//                    Intent data = result.getData();
-//                    doSomeOperations();
-//                }
-//            }
-//        });
-//
-//        public void openSomeActivityForResult() {
-//            Intent intent = new Intent(this, SomeActivity.class);
-//            someActivityResultLauncher.launch(intent);
-//        }
-
 
         return binding.root
     }
@@ -75,7 +46,6 @@ class StageCreateFragment : Fragment(R.layout.stage_content_fragment) {
             uriPhoto = it
             Glide.with(this).load(it).override(1000, 1000).into(binding.imageStage)
         }
-
 
     private fun onSaveButtonClicked() {
         val content = binding.editTextStage.text
@@ -87,18 +57,6 @@ class StageCreateFragment : Fragment(R.layout.stage_content_fragment) {
         }
         findNavController().navigate(R.id.recipeCreateFragment2)
     }
-
-    fun write(fileName: String?, bitmap: Bitmap) {
-        val outputStream: FileOutputStream
-        try {
-            outputStream = context!!.openFileOutput(fileName, Context.MODE_PRIVATE)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-            outputStream.close()
-        } catch (error: Exception) {
-            error.printStackTrace()
-        }
-    }
-
 
     companion object {
         const val STAGE_CONTENT_KEY = "stageContentKey"

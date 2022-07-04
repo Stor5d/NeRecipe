@@ -11,4 +11,5 @@ interface RecipeRepository {
     fun update(recipe: Recipe)
     fun delete(recipeId:Long)
     fun liked(recipeId:Long)
+    fun setFilter(categories: Set<Int>)
 }

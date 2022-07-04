@@ -3,23 +3,19 @@ package ru.stor.nerecipe.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import ru.stor.nerecipe.R
 import ru.stor.nerecipe.classes.Stage
-import ru.stor.nerecipe.databinding.CardStageLayoutBinding
+import ru.stor.nerecipe.databinding.CardStageViewLayoutBinding
 
-internal class StagesAdapter(
-    private val interactionListener: StageInteractionListener
-) : ListAdapter<Stage, StagesAdapter.ViewHolder>(DiffCallbackStage) {
+internal class ViewStagesAdapter: ListAdapter<Stage, ViewStagesAdapter.ViewHolder>(DiffCallbackStageView) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = CardStageLayoutBinding.inflate(inflater, parent, false)
-        return ViewHolder(binding, interactionListener)
+        val binding = CardStageViewLayoutBinding.inflate(inflater, parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -27,38 +23,10 @@ internal class StagesAdapter(
     }
 
     inner class ViewHolder(
-        private val binding: CardStageLayoutBinding,
-        listener: StageInteractionListener
+        private val binding: CardStageViewLayoutBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         private lateinit var stage: Stage
-
-        private val popupMenu by lazy {
-            PopupMenu(itemView.context, binding.menuStageButton).apply {
-                inflate(R.menu.stage_menu)
-                setOnMenuItemClickListener { menuItem ->
-                    when (menuItem.itemId) {
-                        R.id.up -> {
-                            TODO()
-                            true
-                        }
-                        R.id.down -> {
-                            TODO()
-                            true
-                        }
-                        R.id.remove -> {
-                            listener.onRemoveStageClicked(stage)
-                            true
-                        }
-                        else -> false
-                    }
-                }
-            }
-        }
-
-        init {
-            binding.menuStageButton.setOnClickListener { popupMenu.show() }
-        }
 
         fun bind(stage: Stage) {
             this.stage = stage
@@ -78,12 +46,11 @@ internal class StagesAdapter(
     }
 }
 
-private object DiffCallbackStage : DiffUtil.ItemCallback<Stage>() {
+private object DiffCallbackStageView : DiffUtil.ItemCallback<Stage>() {
 
     override fun areItemsTheSame(oldItem: Stage, newItem: Stage): Boolean =
         oldItem.content == newItem.content
 
     override fun areContentsTheSame(oldItem: Stage, newItem: Stage): Boolean =
         oldItem == newItem
-
 }

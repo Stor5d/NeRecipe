@@ -13,11 +13,39 @@ interface RecipeDao {
     @Query("SELECT * FROM recipes ORDER BY id DESC")
     fun getAll(): LiveData<List<RecipeWithStages>>
 
+//    @Query("""SELECT * FROM recipes WHERE id = :id
+//        ORDER BY id DESC""")
+//    fun getFavorites(): LiveData<List<RecipeWithStages>>
+
+    @Query(
+        """SELECT * FROM recipes,categories
+WHERE id == recipe_id AND
+category_Id IN (:categoryIds)
+GROUP BY id
+ORDER BY id ASC
+        """
+    )
+    fun getCategories(categoryIds: Set<Int>): LiveData<List<RecipeWithStages>>
+
+    @Query(
+        """SELECT * FROM recipes,categories
+WHERE id == recipe_id AND
+category_Id IN (:categoryIds) AND
+likedByMe == 0
+GROUP BY id
+ORDER BY id ASC
+        """
+    )
+    fun getCategoriesLiked(categoryIds: List<Int>): LiveData<List<RecipeWithStages>>
+
     @Insert
     fun insertRecipe(recipe: RecipeEntity): Long
 
     @Insert
     fun insertStage(stage: StageEntity)
+
+    @Insert
+    fun insertCategory(category: CategoryIdEntity)
 
 //    @Query(
 //        """UPDATE recipes SET

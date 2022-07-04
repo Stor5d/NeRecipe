@@ -1,7 +1,6 @@
 package ru.stor.nerecipe.classes
 
 import kotlinx.serialization.Serializable
-import ru.stor.nerecipe.db.StageEntity
 
 @Serializable
 data class Stage(
@@ -9,11 +8,4 @@ data class Stage(
     val recipeId: Long,
     val content: String,
     val uriPhoto: String? = null
-) {
-    internal fun Stage.toEntity() = StageEntity(
-        id = id,
-        recipeId = recipeId,
-        content = content,
-        uriPhoto = uriPhoto,
-    )
-}
+)

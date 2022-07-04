@@ -78,7 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:contentDescription="@string/description_post_menu"
+            android:contentDescription="@string/description_recipe_menu"
             app:icon="@drawable/ic_option_24dp"
             app:layout_constraintBottom_toTopOf="@id/likeButton"
             app:layout_constraintEnd_toEndOf="parent"

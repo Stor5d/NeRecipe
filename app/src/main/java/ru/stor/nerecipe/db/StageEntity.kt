@@ -12,7 +12,7 @@ import ru.stor.nerecipe.classes.Stage
     foreignKeys = [ForeignKey(
         entity = RecipeEntity::class,
         parentColumns = ["id"],
-        childColumns = ["recipe_id"],
+        childColumns = ["stage_recipe_id"],
         onDelete = ForeignKey.CASCADE,
         onUpdate = ForeignKey.CASCADE
     )]
@@ -20,11 +20,11 @@ import ru.stor.nerecipe.classes.Stage
 data class StageEntity(
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    val id: Int,
+    @ColumnInfo(name = "stage_id")
+    val stageId: Int,
 
-    @ColumnInfo(name = "recipe_id")
-    val recipeId: Long,
+    @ColumnInfo(name = "stage_recipe_id")
+    val stage_recipe_Id: Long,
 
     @ColumnInfo(name = "content")
     val content: String,
@@ -33,9 +33,9 @@ data class StageEntity(
     val uriPhoto: String?
 
     ) {
-    internal fun Stage.toModel() = Stage(
-        id = id,
-        recipeId = recipeId,
+    internal fun toModel() = Stage(
+        id = stageId,
+        recipeId = stage_recipe_Id,
         content = content,
         uriPhoto = uriPhoto,
     )

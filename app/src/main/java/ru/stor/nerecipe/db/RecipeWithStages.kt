@@ -3,8 +3,6 @@ package ru.stor.nerecipe.db
 import androidx.room.Embedded
 import androidx.room.Relation
 import ru.stor.nerecipe.classes.Recipe
-import ru.stor.nerecipe.classes.Stage
-
 
 data class RecipeWithStages(
 
@@ -12,6 +10,9 @@ data class RecipeWithStages(
     val recipeEntity: RecipeEntity,
 
     @Relation(parentColumn = "id", entityColumn = "recipe_id")
+    val categoriesEntity: List<CategoryIdEntity>,
+
+    @Relation(parentColumn = "id", entityColumn = "stage_recipe_id")
     val stagesEntity: List<StageEntity>
 
 ) {
@@ -21,15 +22,11 @@ data class RecipeWithStages(
         title = recipeEntity.title,
         author = recipeEntity.author,
         liked = recipeEntity.liked,
-        categories = recipeEntity.categories,
+        categories = categoriesEntity.map {
+            it.categoryId
+        },
         stages = stagesEntity.map { stageEntity ->
-            Stage(
-                id = stageEntity.id,
-                recipeId = recipeEntity.id,
-                content = stageEntity.content,
-                uriPhoto = stageEntity.uriPhoto
-            )
+          stageEntity.toModel()
         }
     )
-
 }
