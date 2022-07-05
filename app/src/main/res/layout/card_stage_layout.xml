@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_food_240dp"
             android:visibility="gone"
+            android:layout_marginTop="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textViewCaptionStage"

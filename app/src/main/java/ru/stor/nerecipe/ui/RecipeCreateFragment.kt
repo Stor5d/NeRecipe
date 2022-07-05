@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -27,12 +28,22 @@ class RecipeCreateFragment : Fragment() {
 
     private fun onSaveButtonClicked(binding: RecipeCreateFragmentBinding) {
         val text = binding.titleEditText.text
-        if (!text.isNullOrBlank()) {
-            val resultBundle = Bundle(2)
-            resultBundle.putString(TITLE_KEY, text.toString())
-            resultBundle.putIntegerArrayList(CATEGORIES_KEY, filterList)
-            setFragmentResult(REQUEST_KEY, resultBundle)
+        if (text.isNullOrBlank()) {
+            Toast.makeText(context, R.string.no_caption_create_recipe, Toast.LENGTH_SHORT).show()
+            return
         }
+        if (viewModel.getCurrentRecipe().value?.stages?.size!! < 1) {
+            Toast.makeText(context, R.string.no_stage_create_recipe, Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (viewModel.getCurrentRecipe().value?.categories?.size!! < 1) {
+            Toast.makeText(context, R.string.no_category_create_recipe, Toast.LENGTH_SHORT).show()
+            return
+        }
+        val resultBundle = Bundle(2)
+        resultBundle.putString(TITLE_KEY, text.toString())
+        resultBundle.putIntegerArrayList(CATEGORIES_KEY, filterList)
+        setFragmentResult(REQUEST_KEY, resultBundle)
         findNavController().navigate(R.id.feedFragment3)
     }
 
@@ -62,11 +73,10 @@ class RecipeCreateFragment : Fragment() {
     ).also {
         binding = it
 
+
         val adapter = StagesAdapter(viewModel)
         val stageRecyclerView = binding.stageRecyclerView
         stageRecyclerView.adapter = adapter
-
-        //currentRecipe = null
 
         with(binding) {
             titleEditText.addTextChangedListener {
@@ -115,6 +125,7 @@ class RecipeCreateFragment : Fragment() {
                 currentRecipe = recipe
                 bind(recipe)
                 adapter.submitList(recipe.stages)
+                adapter.notifyDataSetChanged()
             }
         }
     }.root
@@ -126,29 +137,27 @@ class RecipeCreateFragment : Fragment() {
         }
     }
 
+    private fun getCategoriesText(list: List<Int>): String {
+        var text =
+            if (list.contains(Categories.European.id)) getString(R.string.category_european) + "\n" else ""
+        text += if (list.contains(Categories.Asian.id)) getString(R.string.category_asian) + "\n" else ""
+        text += if (list.contains(Categories.PanAsian.id)) getString(R.string.category_pan_asian) + "\n" else ""
+        text += if (list.contains(Categories.Eastern.id)) getString(R.string.category_eastern) + "\n" else ""
+        text += if (list.contains(Categories.American.id)) getString(R.string.category_american) + "\n" else ""
+        text += if (list.contains(Categories.Russian.id)) getString(R.string.category_russian) + "\n" else ""
+        text += if (list.contains(Categories.Mediterranean.id)) getString(R.string.category_mediterranean) + "\n" else ""
+        text = text.removeSuffix("\n")
+        return text
+    }
+
     private fun createStage() {
         findNavController().navigate(R.id.action_recipeCreateFragment2_to_stageCreateFragment)
     }
 
     companion object {
-
-        fun getCategoriesText(list: List<Int>): String {
-            var text =
-                if (list.contains(Categories.European.id)) Categories.European.key + "\n" else ""
-            text += if (list.contains(Categories.Asian.id)) Categories.Asian.key + "\n" else ""
-            text += if (list.contains(Categories.PanAsian.id)) Categories.PanAsian.key + "\n" else ""
-            text += if (list.contains(Categories.Eastern.id)) Categories.Eastern.key + "\n" else ""
-            text += if (list.contains(Categories.American.id)) Categories.American.key + "\n" else ""
-            text += if (list.contains(Categories.Russian.id)) Categories.Russian.key + "\n" else ""
-            text += if (list.contains(Categories.Mediterranean.id)) Categories.Mediterranean.key + "\n" else ""
-            text = text.removeSuffix("\n")
-            return text
-        }
-
         const val TITLE_KEY = "titleKey"
         const val CATEGORIES_KEY = "categoriesKey"
         const val REQUEST_KEY = "requestKey"
         const val FILTER_LIST_KEY = "filterListKey"
-
     }
 }

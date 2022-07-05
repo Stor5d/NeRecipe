@@ -3,15 +3,14 @@ package ru.stor.nerecipe.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.stor.nerecipe.R
+import ru.stor.nerecipe.classes.Categories
 import ru.stor.nerecipe.classes.Recipe
 import ru.stor.nerecipe.databinding.CardLayoutBinding
-import ru.stor.nerecipe.ui.RecipeCreateFragment
 
 internal class RecyclerAdapter(
     private val interactionListener: RecipeInteractionListener
@@ -33,7 +32,7 @@ internal class RecyclerAdapter(
         listener: RecipeInteractionListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        var itemTextView: TextView = binding.title
+        private var itemTextView: TextView = binding.title
         private lateinit var recipe: Recipe
 
 
@@ -57,15 +56,6 @@ internal class RecyclerAdapter(
         }
 
         init {
-
-            itemTextView.setOnClickListener {
-                Toast.makeText(
-                    itemTextView.context,
-                    "Position $layoutPosition \n $oldPosition \n ${currentList[layoutPosition]} ",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
-            }
             binding.likeButton.setOnClickListener { listener.onLikeClicked(recipe.id) }
             binding.menuButton.setOnClickListener { popupMenu.show() }
             binding.cardView.setOnClickListener { listener.onToRecipe(recipe) }
@@ -82,9 +72,22 @@ internal class RecyclerAdapter(
                 authorName.text =
                     recipe.author
                 categoryTextViewContent.text =
-                    RecipeCreateFragment.getCategoriesText(recipe.categories)
+                    getCategoriesText(recipe.categories)
                 likeButton.isChecked = recipe.liked
             }
+        }
+
+        private fun getCategoriesText(list: List<Int>): String {
+            var text =
+                if (list.contains(Categories.European.id)) itemView.context.getString(R.string.category_european) + "\n" else ""
+            text += if (list.contains(Categories.Asian.id)) itemView.context.getString(R.string.category_asian) + "\n" else ""
+            text += if (list.contains(Categories.PanAsian.id)) itemView.context.getString(R.string.category_pan_asian) + "\n" else ""
+            text += if (list.contains(Categories.Eastern.id)) itemView.context.getString(R.string.category_eastern) + "\n" else ""
+            text += if (list.contains(Categories.American.id)) itemView.context.getString(R.string.category_american) + "\n" else ""
+            text += if (list.contains(Categories.Russian.id)) itemView.context.getString(R.string.category_russian) + "\n" else ""
+            text += if (list.contains(Categories.Mediterranean.id)) itemView.context.getString(R.string.category_mediterranean) + "\n" else ""
+            text = text.removeSuffix("\n")
+            return text
         }
     }
 }
@@ -93,7 +96,6 @@ object DiffCallback : DiffUtil.ItemCallback<Recipe>() {
 
     override fun areItemsTheSame(oldItem: Recipe, newItem: Recipe): Boolean =
         oldItem.id == newItem.id
-
 
     override fun areContentsTheSame(oldItem: Recipe, newItem: Recipe): Boolean =
         oldItem == newItem

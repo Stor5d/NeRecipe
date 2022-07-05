@@ -32,7 +32,7 @@ internal class ViewStagesAdapter: ListAdapter<Stage, ViewStagesAdapter.ViewHolde
             this.stage = stage
             with(binding) {
                 val positionStage = layoutPosition + 1
-                textViewStageContent.text = stage.content + "/" + stage.id + "/" + stage.uriPhoto
+                textViewStageContent.text = stage.content
                 textViewCaptionStage.text = "Шаг $positionStage"
                 if (stage.uriPhoto != null) {
                     imageStage.visibility = View.VISIBLE

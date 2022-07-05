@@ -19,7 +19,7 @@ class FilterFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = FilterFragmentSwitchBinding.inflate(
         layoutInflater, container, false
-    ).also { it ->
+    ).also {
         binding = it
 
         with(binding) {
@@ -39,46 +39,77 @@ class FilterFragment : Fragment() {
                     KEY_STATE_SWITCH_EUROPEAN,
                     switchEuropean.isChecked
                 )
+                switchesIsChecked(binding)
             }
             switchAsian.setOnClickListener {
                 viewModel.saveStateSwitch(
                     KEY_STATE_SWITCH_ASIAN,
                     switchAsian.isChecked
                 )
+                switchesIsChecked(binding)
             }
             switchPanAsian.setOnClickListener {
                 viewModel.saveStateSwitch(
                     KEY_STATE_SWITCH_PAN_ASIAN,
                     switchPanAsian.isChecked
                 )
+                switchesIsChecked(binding)
             }
             switchEastern.setOnClickListener {
                 viewModel.saveStateSwitch(
                     KEY_STATE_SWITCH_EASTERN,
                     switchEastern.isChecked
                 )
+                switchesIsChecked(binding)
             }
             switchAmerican.setOnClickListener {
                 viewModel.saveStateSwitch(
                     KEY_STATE_SWITCH_AMERICAN,
                     switchAmerican.isChecked
                 )
+                switchesIsChecked(binding)
             }
             switchRussian.setOnClickListener {
                 viewModel.saveStateSwitch(
                     KEY_STATE_SWITCH_RUSSIAN,
                     switchRussian.isChecked
                 )
+                switchesIsChecked(binding)
             }
             switchMediterranean.setOnClickListener {
                 viewModel.saveStateSwitch(
                     KEY_STATE_SWITCH_MEDITERANEAN,
                     switchMediterranean.isChecked
                 )
+                switchesIsChecked(binding)
             }
         }
 
     }.root
+
+    private fun switchesIsChecked(binding: FilterFragmentSwitchBinding) {
+        if (viewModel.getCategoriesCount() <= 1) {
+            with(binding) {
+                if (switchEuropean.isChecked) switchEuropean.isEnabled = false
+                if (switchAsian.isChecked) switchAsian.isEnabled = false
+                if (switchPanAsian.isChecked) switchPanAsian.isEnabled = false
+                if (switchEastern.isChecked) switchEastern.isEnabled = false
+                if (switchAmerican.isChecked) switchAmerican.isEnabled = false
+                if (switchRussian.isChecked) switchRussian.isEnabled = false
+                if (switchMediterranean.isChecked) switchMediterranean.isEnabled = false
+            }
+        } else {
+            with(binding) {
+                if (switchEuropean.isChecked) switchEuropean.isEnabled = true
+                if (switchAsian.isChecked) switchAsian.isEnabled = true
+                if (switchPanAsian.isChecked) switchPanAsian.isEnabled = true
+                if (switchEastern.isChecked) switchEastern.isEnabled = true
+                if (switchAmerican.isChecked) switchAmerican.isEnabled = true
+                if (switchRussian.isChecked) switchRussian.isEnabled = true
+                if (switchMediterranean.isChecked) switchMediterranean.isEnabled = true
+            }
+        }
+    }
 
     companion object {
         const val KEY_STATE_SWITCH_EUROPEAN = "european"

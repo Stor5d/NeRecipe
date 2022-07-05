@@ -59,7 +59,7 @@ class FavoriteFragment : Fragment(R.layout.favorite_fragment) {
         }
 
         viewModel.navigateToRecipeEditorScreenEvent.observe(viewLifecycleOwner) { recipe ->
-            findNavController().navigate(R.id.action_feedFragment3_to_nav_graph_create_recipe3)
+            findNavController().navigate(R.id.action_favoriteFragment_to_nav_graph_create_recipe)
         }
 
         viewModel.filtratedData.observe(viewLifecycleOwner) { recipes ->

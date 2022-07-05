@@ -6,5 +6,6 @@ interface StageInteractionListener {
 
     fun onRemoveStageClicked(stage: Stage)
     fun onSaveStageClicked(content: String, uriPhoto: String?)
-    fun onMoveStageClicked(stage: Stage)
+    fun onMoveStageUpClicked(position: Int)
+    fun onMoveStageDownClicked(position: Int)
 }

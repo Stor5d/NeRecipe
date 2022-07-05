@@ -24,9 +24,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
         ).recipeDao
     )
     private val repositorySettings: SettingsRepository = SharedPrefsSettingsRepository(application)
-
     val data: LiveData<List<Recipe>> = repository.data as MutableLiveData<List<Recipe>>
-
     val filtratedData: MediatorLiveData<List<Recipe>> = MediatorLiveData()
     val searchQuery: MutableLiveData<String> = MutableLiveData()
     val navigateToRecipeEditorScreenEvent = SingleLiveEvent<Recipe>()
@@ -34,7 +32,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
     private val currentRecipe = SingleLiveEvent<Recipe>()
     private val categoryList = mutableSetOf<Int>()
 
-    private var currentStages: MutableList<Stage> = mutableListOf()
+    // private var currentStages: MutableList<Stage> = mutableListOf()
     private var stageNextId = 0
 
     private fun searchFilter() {
@@ -90,7 +88,6 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
 
     override fun onEditClicked(recipe: Recipe) {
         currentRecipe.value = recipe
-        currentStages = recipe.stages as MutableList<Stage>
         navigateToRecipeEditorScreenEvent.value = recipe
     }
 
@@ -104,7 +101,6 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
             }
         }
         stageNextId = 0
-        //currentRecipe.value = null
     }
 
     fun setTitleCurrentRecipe(title: String) {
@@ -137,7 +133,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
             stageNextId++
             val stage =
                 Stage(id = stageNextId, recipeId = 0, content = content, uriPhoto = uriPhoto)
-            currentStages = if (currentRecipe.value != null) {
+           val currentStages = if (currentRecipe.value != null) {
                 if (currentRecipe.value?.stages?.isNotEmpty() == true) {
                     currentRecipe.value?.stages as MutableList<Stage>
                 } else mutableListOf()
@@ -149,8 +145,23 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
         }
     }
 
-    override fun onMoveStageClicked(stage: Stage) {
-        TODO("Not yet implemented")
+    override fun onMoveStageUpClicked(position: Int) {
+        if (position <= 0) return
+        val stages = currentRecipe.value?.stages ?: return
+        Collections.swap(stages, position - 1, position)
+        currentRecipe.value = currentRecipe.value?.copy(stages = stages)
+    }
+
+    override fun onMoveStageDownClicked(position: Int) {
+        val stages = currentRecipe.value?.stages ?: return
+        if (stages.size <= 1) return
+        if (position >= stages.size - 1) return
+        Collections.swap(stages, position + 1, position)
+        currentRecipe.value = currentRecipe.value?.copy(stages = stages)
+    }
+
+    fun getCategoriesCount(): Int {
+        return categoryList.size
     }
 
     override fun saveStateSwitch(key: String, b: Boolean) {

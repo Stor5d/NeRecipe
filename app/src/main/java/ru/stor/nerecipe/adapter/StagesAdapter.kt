@@ -39,11 +39,11 @@ internal class StagesAdapter(
                 setOnMenuItemClickListener { menuItem ->
                     when (menuItem.itemId) {
                         R.id.up -> {
-                            TODO()
+                            listener.onMoveStageUpClicked(layoutPosition)
                             true
                         }
                         R.id.down -> {
-                            TODO()
+                            listener.onMoveStageDownClicked(layoutPosition)
                             true
                         }
                         R.id.remove -> {
@@ -64,7 +64,7 @@ internal class StagesAdapter(
             this.stage = stage
             with(binding) {
                 val positionStage = layoutPosition + 1
-                textViewStageContent.text = stage.content + "/" + stage.id + "/" + stage.uriPhoto
+                textViewStageContent.text = stage.content
                 textViewCaptionStage.text = "Шаг $positionStage"
                 if (stage.uriPhoto != null) {
                     imageStage.visibility = View.VISIBLE
@@ -85,5 +85,4 @@ private object DiffCallbackStage : DiffUtil.ItemCallback<Stage>() {
 
     override fun areContentsTheSame(oldItem: Stage, newItem: Stage): Boolean =
         oldItem == newItem
-
 }

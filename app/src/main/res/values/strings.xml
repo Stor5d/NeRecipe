@@ -36,5 +36,15 @@
     <string name="save_stage">Save stage</string>
     <string name="description_recipe_menu">Recipe menu</string>
     <string name="edit">Edit</string>
+    <string name="no_caption_create_recipe">Fill in the title field</string>
+    <string name="no_stage_create_recipe">Сreate at least one step</string>
+    <string name="no_category_create_recipe">Please select at least one category</string>
+    <string name="category_european">European</string>
+    <string name="category_asian">Asian</string>
+    <string name="category_pan_asian">PanAsian</string>
+    <string name="category_eastern">Eastern</string>
+    <string name="category_american">American</string>
+    <string name="category_russian">Russian</string>
+    <string name="category_mediterranean">Mediterranean</string>
 
 </resources>
