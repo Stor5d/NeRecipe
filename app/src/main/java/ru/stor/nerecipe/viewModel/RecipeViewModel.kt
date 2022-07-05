@@ -104,7 +104,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
             }
         }
         stageNextId = 0
-        currentRecipe.value = null
+        //currentRecipe.value = null
     }
 
     fun setTitleCurrentRecipe(title: String) {

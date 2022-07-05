@@ -66,7 +66,7 @@ class RecipeCreateFragment : Fragment() {
         val stageRecyclerView = binding.stageRecyclerView
         stageRecyclerView.adapter = adapter
 
-        currentRecipe = null
+        //currentRecipe = null
 
         with(binding) {
             titleEditText.addTextChangedListener {
