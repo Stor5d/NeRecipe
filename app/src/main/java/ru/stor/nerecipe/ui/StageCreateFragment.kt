@@ -1,7 +1,6 @@
 package ru.stor.nerecipe.ui
 
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,11 +12,12 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import ru.stor.nerecipe.R
 import ru.stor.nerecipe.databinding.StageContentFragmentBinding
+import android.net.Uri as Uri1
 
 class StageCreateFragment : Fragment(R.layout.stage_content_fragment) {
 
     private lateinit var binding: StageContentFragmentBinding
-    private var uriPhoto: Uri? = null
+    private var uriPhoto: Uri1? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,19 +43,23 @@ class StageCreateFragment : Fragment(R.layout.stage_content_fragment) {
 
     private val result =
         registerForActivityResult(ActivityResultContracts.GetContent()) {
-            uriPhoto = it
-            Glide.with(this).load(it).override(1000, 1000).into(binding.imageStage)
+            if (it != null) {
+                uriPhoto = it
+                Glide.with(this).load(it).override(1000, 1000).into(binding.imageStage)
+            }
         }
 
     private fun onSaveButtonClicked() {
-        val content = binding.editTextStage.text
+        val content = binding.textInputLayout.editText?.text
         if (!content.isNullOrBlank()) {
             val resultBundle = Bundle(2)
             resultBundle.putString(STAGE_CONTENT_KEY, content.toString())
             resultBundle.putString(STAGE_URI_PHOTO_KEY, uriPhoto.toString())
             setFragmentResult(ADD_STAGE_REQUEST_KEY, resultBundle)
         }
-        findNavController().navigate(R.id.recipeCreateFragment2)
+        val direction =
+            StageCreateFragmentDirections.actionStageCreateFragmentToRecipeCreateFragment2()
+        findNavController().navigate(direction)
     }
 
     companion object {

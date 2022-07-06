@@ -4,6 +4,9 @@
     <string name="app_name">Мои рецепты</string>
     <string name="recipes">Рецепты!</string>
     <string name="create_recipe">Создать рецепт</string>
+    <string name="recipe_creation">Создание рецепта</string>
+    <string name="category_selection">Выбор категории</string>
+    <string name="сreating_a_step">Создание шага</string>
     <string name="title_recipe">Название</string>
     <string name="filter_category_European">Европейская</string>
     <string name="filter_category_Asian">Азиатская</string>
@@ -47,5 +50,6 @@
     <string name="category_american">Американская</string>
     <string name="category_russian">Русская</string>
     <string name="category_mediterranean">Средиземноморская</string>
+    <string name="recipe_view">Просмотр рецепта</string>
 
 </resources>
