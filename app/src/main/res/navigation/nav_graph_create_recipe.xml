@@ -7,10 +7,11 @@
     <fragment
         android:id="@+id/recipeCreateFragment2"
         android:name="ru.stor.nerecipe.ui.RecipeCreateFragment"
-        android:label="RecipeCreateFragment" >
+        android:label="@string/recipe_creation" >
         <action
             android:id="@+id/action_recipeCreateFragment2_to_filterSetupFragment"
-            app:destination="@id/filterSetupFragment" />
+            app:destination="@id/filterSetupFragment"
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_recipeCreateFragment2_to_stageCreateFragment"
             app:destination="@id/stageCreateFragment" />
@@ -18,13 +19,21 @@
     <fragment
         android:id="@+id/filterSetupFragment"
         android:name="ru.stor.nerecipe.ui.FilterSetupFragment"
-        android:label="FilterSetupFragment" >
+        android:label="@string/category_selection" >
         <action
             android:id="@+id/action_filterSetupFragment_to_recipeCreateFragment2"
-            app:destination="@id/recipeCreateFragment2" />
+            app:destination="@id/recipeCreateFragment2"
+            app:popUpTo="@id/recipeCreateFragment2"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/stageCreateFragment"
         android:name="ru.stor.nerecipe.ui.StageCreateFragment"
-        android:label="StageCreateFragment" />
+        android:label="@string/сreating_a_step" >
+        <action
+            android:id="@+id/action_stageCreateFragment_to_recipeCreateFragment2"
+            app:destination="@id/recipeCreateFragment2"
+            app:popUpTo="@id/recipeCreateFragment2"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

@@ -3,6 +3,9 @@
     <string name="recipes">Recipes!</string>
     <string name="app_name">My recipes</string>
     <string name="create_recipe">Create Recipe</string>
+    <string name="recipe_creation">Recipe creation</string>
+    <string name="category_selection">Сategory selection</string>
+    <string name="сreating_a_step">Creating a step</string>
     <string name="title_recipe">Title</string>
     <string name="filter_category_European">European</string>
     <string name="filter_category_Asian">Asian</string>
@@ -46,5 +49,6 @@
     <string name="category_american">American</string>
     <string name="category_russian">Russian</string>
     <string name="category_mediterranean">Mediterranean</string>
+    <string name="recipe_view">Recipe View</string>
 
 </resources>

@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navOptions
 import ru.stor.nerecipe.R
 import ru.stor.nerecipe.adapter.StagesAdapter
 import ru.stor.nerecipe.classes.Categories
@@ -44,7 +45,12 @@ class RecipeCreateFragment : Fragment() {
         resultBundle.putString(TITLE_KEY, text.toString())
         resultBundle.putIntegerArrayList(CATEGORIES_KEY, filterList)
         setFragmentResult(REQUEST_KEY, resultBundle)
-        findNavController().navigate(R.id.feedFragment3)
+        findNavController().navigate(R.id.feedFragment3, null, navOptions {
+            launchSingleTop = true
+            popUpTo(R.id.nav_graph_create_recipe) {
+                inclusive = true
+            }
+        })
     }
 
     private fun onCancelButtonClicked() {
@@ -72,7 +78,6 @@ class RecipeCreateFragment : Fragment() {
         layoutInflater, container, false
     ).also {
         binding = it
-
 
         val adapter = StagesAdapter(viewModel)
         val stageRecyclerView = binding.stageRecyclerView
@@ -151,7 +156,9 @@ class RecipeCreateFragment : Fragment() {
     }
 
     private fun createStage() {
-        findNavController().navigate(R.id.action_recipeCreateFragment2_to_stageCreateFragment)
+        val direction =
+            RecipeCreateFragmentDirections.actionRecipeCreateFragment2ToStageCreateFragment()
+        findNavController().navigate(direction)
     }
 
     companion object {
